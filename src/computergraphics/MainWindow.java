@@ -87,7 +87,7 @@ public class MainWindow extends javax.swing.JFrame {
         btnPlay = new javax.swing.JButton();
         PropertiesPane = new javax.swing.JTabbedPane();
         tab1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        LocationPane = new javax.swing.JPanel();
         XLocation = new javax.swing.JPanel();
         lblLocationXLabel = new javax.swing.JLabel();
         lblLocationXValue = new javax.swing.JLabel();
@@ -183,9 +183,9 @@ public class MainWindow extends javax.swing.JFrame {
         tab1.setBackground(new java.awt.Color(255, 255, 255));
         tab1.setForeground(new java.awt.Color(0, 0, 0));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-        jPanel2.setForeground(new java.awt.Color(0, 0, 0));
+        LocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        LocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        LocationPane.setForeground(new java.awt.Color(0, 0, 0));
 
         XLocation.setBackground(new java.awt.Color(255, 255, 255));
         XLocation.setForeground(new java.awt.Color(0, 0, 0));
@@ -243,19 +243,19 @@ public class MainWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 49);
         YLocation.add(lblLocationYValue, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout LocationPaneLayout = new javax.swing.GroupLayout(LocationPane);
+        LocationPane.setLayout(LocationPaneLayout);
+        LocationPaneLayout.setHorizontalGroup(
+            LocationPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LocationPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(XLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(YLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        LocationPaneLayout.setVerticalGroup(
+            LocationPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(XLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(YLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -266,14 +266,14 @@ public class MainWindow extends javax.swing.JFrame {
             tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tab1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         tab1Layout.setVerticalGroup(
             tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tab1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(394, Short.MAX_VALUE))
         );
 
@@ -331,7 +331,7 @@ public class MainWindow extends javax.swing.JFrame {
         ModeStatusBar.add(lblModeStatusValue, gridBagConstraints);
 
         SttBar.add(ModeStatusBar);
-        ModeStatusBar.setBounds(755, 7, 92, 16);
+        ModeStatusBar.setBounds(762, 7, 92, 16);
 
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
@@ -545,7 +545,6 @@ public class MainWindow extends javax.swing.JFrame {
         Image newImg = image.getScaledInstance(this.btnCar.getWidth(), this.btnCar.getHeight(), java.awt.Image.SCALE_SMOOTH); 
         ImageIcon scaled3DIcon = new ImageIcon(newImg);
         this.btnCar.setIcon(scaled3DIcon);
-        //this.btnCar.setMnemonic(KeyEvent.VK_C);
         
         icon = new ImageIcon("images/play_icon.png");
         image = icon.getImage();
@@ -571,7 +570,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.btnQtmInfo.setIcon(scaledQMIcon);
         this.btnQtmInfo.setMnemonic(KeyEvent.VK_SLASH);  
         
-        icon = new ImageIcon("images/meme28.jpg");
+        icon = new ImageIcon("images/meme28.png");
         image = icon.getImage();
         newImg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH); 
         scaledPePeIcon = new ImageIcon(newImg);
@@ -680,7 +679,7 @@ public class MainWindow extends javax.swing.JFrame {
         } else {
             this.SttBar.repaint();
             grtLocation += step;
-            if (grtLocation == 620) {
+            if (grtLocation == 603) {
                 grtRunBack = true;
             }
         }  
@@ -714,6 +713,7 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Global application variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel DrawingPane;
+    private javax.swing.JPanel LocationPane;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel ModeStatusBar;
     private javax.swing.JTabbedPane PropertiesPane;
@@ -727,7 +727,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnQtmInfo;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblLocationXLabel;
