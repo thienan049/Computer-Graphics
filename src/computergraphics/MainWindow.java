@@ -52,17 +52,15 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public MainWindow() {
-        try{
-            settingUp();
-        } catch(Exception e){}
+    public MainWindow() {       
+        settingUpContentPaneBackground();
         initComponents();           
         System.out.println(this.jLayeredPane1.getSize());
         System.out.println(this.DrawingPane2D.getSize());
         System.out.println(this.DrawingPane3D.getSize());
         System.out.println(this.getSize());
         try  {
-            
+            settingUpSomeFunctionalities();
             customMenubar();
             customChoosingShapesBar();
             customStatusBar();
@@ -673,17 +671,26 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     /**
-     * Custom some initialized components properties 
+     * Custom some initialized components properties & functionalities
      */
-    public void settingUp() throws IOException
+    public void settingUpContentPaneBackground()
     {
         /**
         * Setting up some properties for main window
         */
         //this.getContentPane().setBackground(new Color(60, 63, 65)); // Set màu nền của contentPane của frame
-        BufferedImage myImage = ImageIO.read(new File("images/bg.jpg"));
-        Image myyImage = myImage.getScaledInstance(1021, 669, java.awt.Image.SCALE_SMOOTH); 
-        this.setContentPane(new BackgroundImage(myyImage));
+        try{
+            BufferedImage myImage = ImageIO.read(new File("images/bg.jpg"));
+            Image myyImage = myImage.getScaledInstance(1021, 669, java.awt.Image.SCALE_SMOOTH); 
+            this.setContentPane(new BackgroundImage(myyImage));      
+        } catch(Exception e){System.out.println(e);}
+    }
+    
+    public void settingUpSomeFunctionalities()
+    {
+      /**
+        * Timer for some animations
+        */
 //        ActionListener greetingAction = new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent arg0) {
@@ -694,9 +701,6 @@ public class MainWindow extends javax.swing.JFrame {
 //        greetingTimer = new Timer(20, greetingAction);
 //        greetingTimer.start();
          
-        /**
-        * Timer for some animations
-        */
         greetingTimer = new Timer(10, new ActionListener(){    //Câu chào ở thanh status animation
         public void actionPerformed(ActionEvent e) {
             greeting();
@@ -790,7 +794,6 @@ public class MainWindow extends javax.swing.JFrame {
             {
                 m[i].setBackground(Color.WHITE);
             }
-            System.out.println(c.getClass());
            // if (c.getClass().isInstance(m[i])) 
             getComponents((Container) m[i]);
         }
