@@ -6,18 +6,25 @@
 package computergraphics;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.EventListener;
 import javax.imageio.ImageIO;
@@ -26,6 +33,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -45,12 +53,16 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     public MainWindow() {
-        initComponents();   
-        settingUp();
+        try{
+            settingUp();
+        } catch(Exception e){}
+        initComponents();           
         System.out.println(this.jLayeredPane1.getSize());
         System.out.println(this.DrawingPane2D.getSize());
         System.out.println(this.DrawingPane3D.getSize());
+        System.out.println(this.getSize());
         try  {
+            
             customMenubar();
             customChoosingShapesBar();
             customStatusBar();
@@ -88,8 +100,6 @@ public class MainWindow extends javax.swing.JFrame {
         lblModeStatus = new javax.swing.JLabel();
         lblModeStatusValue = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        DrawingPane3D = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         DrawingPane2D = new javax.swing.JPanel()
         {
             @Override
@@ -107,6 +117,8 @@ public class MainWindow extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        DrawingPane3D = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         PropertiesPane = new javax.swing.JTabbedPane();
         tab1 = new javax.swing.JPanel();
         LocationPane = new javax.swing.JPanel();
@@ -117,6 +129,7 @@ public class MainWindow extends javax.swing.JFrame {
         lblLocationYLabel = new javax.swing.JLabel();
         lblLocationYValue = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         mbFileMenu = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -129,6 +142,9 @@ public class MainWindow extends javax.swing.JFrame {
         setBackground(new java.awt.Color(0, 0, 0));
         setResizable(false);
 
+        btnCar.setBorderPainted(false);
+        btnCar.setContentAreaFilled(false);
+        btnCar.setFocusPainted(false);
         btnCar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCarMouseClicked(evt);
@@ -173,7 +189,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         SttBar.add(btnQtmInfo);
-        btnQtmInfo.setBounds(955, 5, 22, 20);
+        btnQtmInfo.setBounds(978, 5, 22, 20);
 
         ModeStatusBar.setBackground(new java.awt.Color(0, 122, 204));
         ModeStatusBar.setForeground(new java.awt.Color(255, 255, 255));
@@ -204,32 +220,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(800, 500));
         jLayeredPane1.setLayout(new java.awt.CardLayout());
 
-        DrawingPane3D.setBackground(new java.awt.Color(255, 255, 255));
-        DrawingPane3D.setPreferredSize(new java.awt.Dimension(1000, 500));
-
-        jLabel1.setText("TAB 3D");
-
-        javax.swing.GroupLayout DrawingPane3DLayout = new javax.swing.GroupLayout(DrawingPane3D);
-        DrawingPane3D.setLayout(DrawingPane3DLayout);
-        DrawingPane3DLayout.setHorizontalGroup(
-            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPane3DLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(227, Short.MAX_VALUE))
-        );
-        DrawingPane3DLayout.setVerticalGroup(
-            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPane3DLayout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(256, Short.MAX_VALUE))
-        );
-
-        jLayeredPane1.add(DrawingPane3D, "card3");
-
         DrawingPane2D.setBackground(new java.awt.Color(255, 255, 255));
-        DrawingPane2D.setPreferredSize(new java.awt.Dimension(1000, 500));
+        DrawingPane2D.setPreferredSize(new java.awt.Dimension(800, 500));
 
         jLabel2.setText("TAB 2D");
 
@@ -257,10 +249,34 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         jLayeredPane1.add(DrawingPane2D, "card2");
+
+        DrawingPane3D.setBackground(new java.awt.Color(255, 255, 255));
+        DrawingPane3D.setPreferredSize(new java.awt.Dimension(800, 500));
+
+        jLabel1.setText("TAB 3D");
+
+        javax.swing.GroupLayout DrawingPane3DLayout = new javax.swing.GroupLayout(DrawingPane3D);
+        DrawingPane3D.setLayout(DrawingPane3DLayout);
+        DrawingPane3DLayout.setHorizontalGroup(
+            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DrawingPane3DLayout.createSequentialGroup()
+                .addGap(191, 191, 191)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(227, Short.MAX_VALUE))
+        );
+        DrawingPane3DLayout.setVerticalGroup(
+            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DrawingPane3DLayout.createSequentialGroup()
+                .addGap(194, 194, 194)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLayeredPane1.add(DrawingPane3D, "card3");
 
         PropertiesPane.setBackground(new java.awt.Color(39, 45, 48));
         PropertiesPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("VNI-Whimsy", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
@@ -369,7 +385,7 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 165, Short.MAX_VALUE)
+            .addGap(0, 188, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,6 +393,13 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         PropertiesPane.addTab("tab2", jPanel1);
+
+        jButton1.setText("Click me");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
@@ -421,12 +444,14 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(SttBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(120, 120, 120)
                 .addComponent(btnClear)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(54, 54, 54))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -434,20 +459,25 @@ public class MainWindow extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnClear)
-                        .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnClear)
+                                .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
@@ -524,14 +554,33 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void btnQtmInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQtmInfoMouseClicked
         UIManager.put("OptionPane.messageFont", new Font("VNF-Valentina", Font.PLAIN, 15));
+        UIManager.put("OptionPane.buttonFont", new Font("VNF-Valentina", Font.PLAIN, 15));       
+        UIManager.put("OptionPane.messageDialog.titlePane.background", Color.black);
+//        JOptionPane.showMessageDialog(this, "N17DCCN008  Đinh Nguyễn Thiên Ân \n" 
+//                                          + "N17DCCN013   Nguyễn Mạnh Bình \n"
+//                                          + "N17DCCN042  Phạm Phan Đại Hải \n"
+//                                          + "N17DCCN053  Trương Minh Hoàng \n"
+//                                          + "N17DCCN056  Nguyễn Ngọc Huy",
+//                                     "Thành Viên", JOptionPane.INFORMATION_MESSAGE, scaledPePeIcon);
         
-        JOptionPane.showMessageDialog(this, "N17DCCN008  Đinh Nguyễn Thiên Ân \n" 
-                                          + "N17DCCN013   Nguyễn Mạnh Bình \n"
-                                          + "N17DCCN042  Phạm Phan Đại Hải \n"
-                                          + "N17DCCN053  Trương Minh Hoàng \n"
-                                          + "N17DCCN056  Nguyễn Ngọc Huy",
-                                     "Thành Viên", JOptionPane.INFORMATION_MESSAGE, scaledPePeIcon);
+        JOptionPane op = new JOptionPane("N17DCCN008  Đinh Nguyễn Thiên Ân \n" 
+                                       + "N17DCCN013   Nguyễn Mạnh Bình \n"
+                                       + "N17DCCN042  Phạm Phan Đại Hải \n"
+                                       + "N17DCCN053  Trương Minh Hoàng \n"
+                                       + "N17DCCN056  Nguyễn Ngọc Huy"
+                                       ,JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, scaledPePeIcon); 
+        op.setBackground(Color.WHITE);
+        getComponents(op);
+        JDialog dialog = op.createDialog(this, "Thành Viên");
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(false);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);      
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnQtmInfoMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        gottaSeeitManxD();
+    }//GEN-LAST:event_jButton1ActionPerformed
     // </editor-fold>          
     
     // <editor-fold defaultstate="collapsed" desc="Components Customizing"> 
@@ -587,7 +636,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public void customChoosingShapesBar()
     {
-        ImageIcon icon = new ImageIcon("images/3D_coordinate.png");
+        ImageIcon icon = new ImageIcon("images/car_icon.png");
         Image image = icon.getImage();
         Image newImg = image.getScaledInstance(this.btnCar.getWidth(), this.btnCar.getHeight(), java.awt.Image.SCALE_SMOOTH); 
         ImageIcon scaled3DIcon = new ImageIcon(newImg);
@@ -626,13 +675,15 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Custom some initialized components properties 
      */
-    public void settingUp()
+    public void settingUp() throws IOException
     {
         /**
         * Setting up some properties for main window
         */
-        this.getContentPane().setBackground(new Color(60, 63, 65)); // Set màu nền của contentPane của frame
-
+        //this.getContentPane().setBackground(new Color(60, 63, 65)); // Set màu nền của contentPane của frame
+        BufferedImage myImage = ImageIO.read(new File("images/bg.jpg"));
+        Image myyImage = myImage.getScaledInstance(1021, 669, java.awt.Image.SCALE_SMOOTH); 
+        this.setContentPane(new BackgroundImage(myyImage));
 //        ActionListener greetingAction = new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent arg0) {
@@ -732,6 +783,31 @@ public class MainWindow extends javax.swing.JFrame {
         }  
     }
     
+    public void getComponents(Container c) {
+        Component[] m = c.getComponents();
+        for (int i = 0; i < m.length; i++) {
+            if (m[i].getClass().getName() == "javax.swing.JPanel")
+            {
+                m[i].setBackground(Color.WHITE);
+            }
+            System.out.println(c.getClass());
+           // if (c.getClass().isInstance(m[i])) 
+            getComponents((Container) m[i]);
+        }
+    }
+    
+    public void gottaSeeitManxD()
+    {
+        if(this.jLayeredPane1.isVisible()){
+            this.jLayeredPane1.setVisible(false);
+            this.PropertiesPane.setVisible(false);
+        }else{
+            this.jLayeredPane1.setVisible(true);
+            this.PropertiesPane.setVisible(true);
+        }
+            
+    }
+    
     // </editor-fold> 
      
     // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">
@@ -774,6 +850,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnQtmInfo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
