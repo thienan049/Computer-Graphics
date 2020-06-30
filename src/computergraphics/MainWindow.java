@@ -47,6 +47,9 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();   
         settingUp();
+        System.out.println(this.jLayeredPane1.getSize());
+        System.out.println(this.DrawingPane2D.getSize());
+        System.out.println(this.DrawingPane3D.getSize());
         try  {
             customMenubar();
             customChoosingShapesBar();
@@ -66,35 +69,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        DrawingPane = new javax.swing.JPanel()
-        {
-            @Override
-            public void paintComponent(Graphics g) 
-            {
-                super.paintComponent(g);
-                if(start == true)
-                {
-                    //newCar = new Car(new Point(location, 250));        
-                    DrawCar draw = new DrawCar(newCar);
-                    draw.drawing((Graphics2D)g, Color.RED);
-                }
-            }
-        };
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         btnCar = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         btnPlay = new javax.swing.JButton();
-        PropertiesPane = new javax.swing.JTabbedPane();
-        tab1 = new javax.swing.JPanel();
-        LocationPane = new javax.swing.JPanel();
-        XLocation = new javax.swing.JPanel();
-        lblLocationXLabel = new javax.swing.JLabel();
-        lblLocationXValue = new javax.swing.JLabel();
-        YLocation = new javax.swing.JPanel();
-        lblLocationYLabel = new javax.swing.JLabel();
-        lblLocationYValue = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
         SttBar = new javax.swing.JPanel()
         {
             @Override
@@ -110,6 +87,36 @@ public class MainWindow extends javax.swing.JFrame {
         ModeStatusBar = new javax.swing.JPanel();
         lblModeStatus = new javax.swing.JLabel();
         lblModeStatusValue = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        DrawingPane3D = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        DrawingPane2D = new javax.swing.JPanel()
+        {
+            @Override
+            public void paintComponent(Graphics g) 
+            {
+                super.paintComponent(g);
+                if(start == true)
+                {
+                    //newCar = new Car(new Point(location, 250));        
+                    DrawCar draw = new DrawCar(newCar);
+                    draw.drawing((Graphics2D)g, Color.RED);
+                }
+            }
+        };
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        PropertiesPane = new javax.swing.JTabbedPane();
+        tab1 = new javax.swing.JPanel();
+        LocationPane = new javax.swing.JPanel();
+        XLocation = new javax.swing.JPanel();
+        lblLocationXLabel = new javax.swing.JLabel();
+        lblLocationXValue = new javax.swing.JLabel();
+        YLocation = new javax.swing.JPanel();
+        lblLocationYLabel = new javax.swing.JLabel();
+        lblLocationYValue = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         mbFileMenu = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -121,29 +128,6 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Computer Graphics");
         setBackground(new java.awt.Color(0, 0, 0));
         setResizable(false);
-
-        DrawingPane.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout DrawingPaneLayout = new javax.swing.GroupLayout(DrawingPane);
-        DrawingPane.setLayout(DrawingPaneLayout);
-        DrawingPaneLayout.setHorizontalGroup(
-            DrawingPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DrawingPaneLayout.createSequentialGroup()
-                .addContainerGap(558, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(152, 152, 152))
-        );
-        DrawingPaneLayout.setVerticalGroup(
-            DrawingPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPaneLayout.createSequentialGroup()
-                .addGap(171, 171, 171)
-                .addGroup(DrawingPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         btnCar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -175,6 +159,108 @@ public class MainWindow extends javax.swing.JFrame {
                 btnPlayMouseClicked(evt);
             }
         });
+
+        SttBar.setBackground(new java.awt.Color(0, 122, 204));
+        SttBar.setLayout(null);
+
+        btnQtmInfo.setToolTipText("Information");
+        btnQtmInfo.setBorderPainted(false);
+        btnQtmInfo.setContentAreaFilled(false);
+        btnQtmInfo.setFocusable(false);
+        btnQtmInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQtmInfoMouseClicked(evt);
+            }
+        });
+        SttBar.add(btnQtmInfo);
+        btnQtmInfo.setBounds(955, 5, 22, 20);
+
+        ModeStatusBar.setBackground(new java.awt.Color(0, 122, 204));
+        ModeStatusBar.setForeground(new java.awt.Color(255, 255, 255));
+        ModeStatusBar.setToolTipText("Current dimensional mode");
+        ModeStatusBar.setPreferredSize(new java.awt.Dimension(90, 16));
+        java.awt.GridBagLayout StatusBarLayout = new java.awt.GridBagLayout();
+        StatusBarLayout.rowWeights = new double[] {10.0};
+        ModeStatusBar.setLayout(StatusBarLayout);
+
+        lblModeStatus.setBackground(new java.awt.Color(0, 0, 0));
+        lblModeStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lblModeStatus.setText("Mode status:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 2);
+        ModeStatusBar.add(lblModeStatus, gridBagConstraints);
+
+        lblModeStatusValue.setBackground(new java.awt.Color(0, 0, 0));
+        lblModeStatusValue.setForeground(new java.awt.Color(255, 255, 255));
+        lblModeStatusValue.setText("2D");
+        lblModeStatusValue.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
+        ModeStatusBar.add(lblModeStatusValue, gridBagConstraints);
+
+        SttBar.add(ModeStatusBar);
+        ModeStatusBar.setBounds(798, 7, 92, 16);
+
+        jLayeredPane1.setPreferredSize(new java.awt.Dimension(800, 500));
+        jLayeredPane1.setLayout(new java.awt.CardLayout());
+
+        DrawingPane3D.setBackground(new java.awt.Color(255, 255, 255));
+        DrawingPane3D.setPreferredSize(new java.awt.Dimension(1000, 500));
+
+        jLabel1.setText("TAB 3D");
+
+        javax.swing.GroupLayout DrawingPane3DLayout = new javax.swing.GroupLayout(DrawingPane3D);
+        DrawingPane3D.setLayout(DrawingPane3DLayout);
+        DrawingPane3DLayout.setHorizontalGroup(
+            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DrawingPane3DLayout.createSequentialGroup()
+                .addGap(191, 191, 191)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(227, Short.MAX_VALUE))
+        );
+        DrawingPane3DLayout.setVerticalGroup(
+            DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DrawingPane3DLayout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(256, Short.MAX_VALUE))
+        );
+
+        jLayeredPane1.add(DrawingPane3D, "card3");
+
+        DrawingPane2D.setBackground(new java.awt.Color(255, 255, 255));
+        DrawingPane2D.setPreferredSize(new java.awt.Dimension(1000, 500));
+
+        jLabel2.setText("TAB 2D");
+
+        javax.swing.GroupLayout DrawingPane2DLayout = new javax.swing.GroupLayout(DrawingPane2D);
+        DrawingPane2D.setLayout(DrawingPane2DLayout);
+        DrawingPane2DLayout.setHorizontalGroup(
+            DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DrawingPane2DLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(152, 152, 152))
+            .addGroup(DrawingPane2DLayout.createSequentialGroup()
+                .addGap(207, 207, 207)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(378, Short.MAX_VALUE))
+        );
+        DrawingPane2DLayout.setVerticalGroup(
+            DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DrawingPane2DLayout.createSequentialGroup()
+                .addGap(174, 174, 174)
+                .addGroup(DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(199, Short.MAX_VALUE))
+        );
+
+        jLayeredPane1.add(DrawingPane2D, "card2");
 
         PropertiesPane.setBackground(new java.awt.Color(39, 45, 48));
         PropertiesPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("VNI-Whimsy", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
@@ -267,14 +353,14 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(tab1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         tab1Layout.setVerticalGroup(
             tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tab1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(394, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         PropertiesPane.addTab("Car", tab1);
@@ -287,51 +373,10 @@ public class MainWindow extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         PropertiesPane.addTab("tab2", jPanel1);
-
-        SttBar.setBackground(new java.awt.Color(0, 122, 204));
-        SttBar.setLayout(null);
-
-        btnQtmInfo.setToolTipText("Information");
-        btnQtmInfo.setBorderPainted(false);
-        btnQtmInfo.setContentAreaFilled(false);
-        btnQtmInfo.setFocusable(false);
-        btnQtmInfo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnQtmInfoMouseClicked(evt);
-            }
-        });
-        SttBar.add(btnQtmInfo);
-        btnQtmInfo.setBounds(933, 5, 22, 20);
-
-        ModeStatusBar.setBackground(new java.awt.Color(0, 122, 204));
-        ModeStatusBar.setForeground(new java.awt.Color(255, 255, 255));
-        ModeStatusBar.setToolTipText("Current dimensional mode");
-        ModeStatusBar.setPreferredSize(new java.awt.Dimension(90, 16));
-        java.awt.GridBagLayout StatusBarLayout = new java.awt.GridBagLayout();
-        StatusBarLayout.rowWeights = new double[] {10.0};
-        ModeStatusBar.setLayout(StatusBarLayout);
-
-        lblModeStatus.setBackground(new java.awt.Color(0, 0, 0));
-        lblModeStatus.setForeground(new java.awt.Color(255, 255, 255));
-        lblModeStatus.setText("Mode status:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 2);
-        ModeStatusBar.add(lblModeStatus, gridBagConstraints);
-
-        lblModeStatusValue.setBackground(new java.awt.Color(0, 0, 0));
-        lblModeStatusValue.setForeground(new java.awt.Color(255, 255, 255));
-        lblModeStatusValue.setText("2D");
-        lblModeStatusValue.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
-        ModeStatusBar.add(lblModeStatusValue, gridBagConstraints);
-
-        SttBar.add(ModeStatusBar);
-        ModeStatusBar.setBounds(762, 7, 92, 16);
 
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
@@ -373,7 +418,8 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addComponent(SttBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
@@ -382,27 +428,24 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(btnClear)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(DrawingPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(2, 2, 2)
-                .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(SttBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(PropertiesPane))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnClear)
+                        .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnClear)
-                            .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(DrawingPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(PropertiesPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -417,10 +460,14 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void _2DMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__2DMenuItemActionPerformed
         this.lblModeStatusValue.setText("2D");
+        this.DrawingPane2D.setVisible(true);
+        this.DrawingPane3D.setVisible(false);    
     }//GEN-LAST:event__2DMenuItemActionPerformed
 
     private void _3DMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__3DMenuItemActionPerformed
         this.lblModeStatusValue.setText("3D");
+        this.DrawingPane3D.setVisible(true);
+        this.DrawingPane2D.setVisible(false);
     }//GEN-LAST:event__3DMenuItemActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -435,13 +482,13 @@ public class MainWindow extends javax.swing.JFrame {
             this.lblLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
             System.out.println(location);
             if (runBack == true) {                
-                this.DrawingPane.repaint();
+                this.DrawingPane2D.repaint();
                 location -= step;
                 if (location == startingLocation) {
                     runBack = false;
                 }
             } else {
-                this.DrawingPane.repaint();
+                this.DrawingPane2D.repaint();
                 location += step;
                 if (location == stopLocation) {
                     runBack = true;
@@ -455,7 +502,7 @@ public class MainWindow extends javax.swing.JFrame {
             start = true;
             location = startingLocation;
             newCar = new Car(new Point(location, yStarted));
-            this.DrawingPane.repaint();
+            this.DrawingPane2D.repaint();
             this.lblLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
             this.lblLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
             location += step;   
@@ -655,7 +702,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public void clearDrawingPanel() // Làm mới drawing panel xóa ds các đối tượng đã được vẽ
     {
-        Graphics2D grp = (Graphics2D)this.DrawingPane.getGraphics();
+        Graphics2D grp = (Graphics2D)this.DrawingPane2D.getGraphics();
         grp.setBackground(Color.WHITE);    
     }
     
@@ -679,7 +726,7 @@ public class MainWindow extends javax.swing.JFrame {
         } else {
             this.SttBar.repaint();
             grtLocation += step;
-            if (grtLocation == 603) {
+            if (grtLocation == 633) {
                 grtRunBack = true;
             }
         }  
@@ -712,7 +759,8 @@ public class MainWindow extends javax.swing.JFrame {
     
     // <editor-fold defaultstate="collapsed" desc="Global application variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel DrawingPane;
+    private javax.swing.JPanel DrawingPane2D;
+    private javax.swing.JPanel DrawingPane3D;
     private javax.swing.JPanel LocationPane;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel ModeStatusBar;
@@ -726,6 +774,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnQtmInfo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
