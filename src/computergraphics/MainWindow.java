@@ -5,43 +5,32 @@
  */
 package computergraphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
-import java.util.ArrayList;
-import java.util.EventListener;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-
 
 /**
  *
@@ -60,6 +49,7 @@ public class MainWindow extends javax.swing.JFrame {
         System.out.println(this.DrawingPane3D.getSize());
         System.out.println(this.getSize());
         try  {
+            //drawGrid();
             settingUpSomeFunctionalities();
             customMenubar();
             customChoosingShapesBar();
@@ -79,9 +69,6 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnCar = new javax.swing.JButton();
-        btnClear = new javax.swing.JButton();
-        btnPlay = new javax.swing.JButton();
         SttBar = new javax.swing.JPanel()
         {
             @Override
@@ -109,25 +96,28 @@ public class MainWindow extends javax.swing.JFrame {
                     //newCar = new Car(new Point(location, 250));        
                     DrawCar draw = new DrawCar(newCar);
                     draw.drawing((Graphics2D)g, Color.RED);
+                    // drawGrid();
                 }
             }
         };
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         DrawingPane3D = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         PropertiesPane = new javax.swing.JTabbedPane();
         tab1 = new javax.swing.JPanel();
         LocationPane = new javax.swing.JPanel();
         XLocation = new javax.swing.JPanel();
         lblLocationXLabel = new javax.swing.JLabel();
-        lblLocationXValue = new javax.swing.JLabel();
+        txtFLocationXValue = new javax.swing.JTextField();
         YLocation = new javax.swing.JPanel();
         lblLocationYLabel = new javax.swing.JLabel();
-        lblLocationYValue = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        txtFLocationYValue = new javax.swing.JTextField();
+        tab2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        shapesChoosingBar = new javax.swing.JPanel();
+        btnCar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnPlay = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        separator = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         mbFileMenu = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -139,40 +129,6 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Computer Graphics");
         setBackground(new java.awt.Color(0, 0, 0));
         setResizable(false);
-
-        btnCar.setBorderPainted(false);
-        btnCar.setContentAreaFilled(false);
-        btnCar.setFocusPainted(false);
-        btnCar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCarMouseClicked(evt);
-            }
-        });
-        btnCar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCarActionPerformed(evt);
-            }
-        });
-
-        btnClear.setText("Clear");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
-
-        btnPlay.setToolTipText("S");
-        btnPlay.setBorderPainted(false);
-        btnPlay.setContentAreaFilled(false);
-        btnPlay.setFocusable(false);
-        btnPlay.setMaximumSize(new java.awt.Dimension(40, 40));
-        btnPlay.setMinimumSize(new java.awt.Dimension(40, 40));
-        btnPlay.setPreferredSize(new java.awt.Dimension(40, 40));
-        btnPlay.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPlayMouseClicked(evt);
-            }
-        });
 
         SttBar.setBackground(new java.awt.Color(0, 122, 204));
         SttBar.setLayout(null);
@@ -221,33 +177,15 @@ public class MainWindow extends javax.swing.JFrame {
         DrawingPane2D.setBackground(new java.awt.Color(255, 255, 255));
         DrawingPane2D.setPreferredSize(new java.awt.Dimension(800, 500));
 
-        jLabel2.setText("TAB 2D");
-
         javax.swing.GroupLayout DrawingPane2DLayout = new javax.swing.GroupLayout(DrawingPane2D);
         DrawingPane2D.setLayout(DrawingPane2DLayout);
         DrawingPane2DLayout.setHorizontalGroup(
             DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DrawingPane2DLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(152, 152, 152))
-            .addGroup(DrawingPane2DLayout.createSequentialGroup()
-                .addGap(207, 207, 207)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(378, Short.MAX_VALUE))
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         DrawingPane2DLayout.setVerticalGroup(
             DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPane2DLayout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addGroup(DrawingPane2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(200, Short.MAX_VALUE))
+            .addGap(0, 505, Short.MAX_VALUE)
         );
 
         jLayeredPane1.add(DrawingPane2D, "card2");
@@ -255,110 +193,68 @@ public class MainWindow extends javax.swing.JFrame {
         DrawingPane3D.setBackground(new java.awt.Color(255, 255, 255));
         DrawingPane3D.setPreferredSize(new java.awt.Dimension(800, 500));
 
-        jLabel1.setText("TAB 3D");
-
         javax.swing.GroupLayout DrawingPane3DLayout = new javax.swing.GroupLayout(DrawingPane3D);
         DrawingPane3D.setLayout(DrawingPane3DLayout);
         DrawingPane3DLayout.setHorizontalGroup(
             DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPane3DLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(227, Short.MAX_VALUE))
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         DrawingPane3DLayout.setVerticalGroup(
             DrawingPane3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DrawingPane3DLayout.createSequentialGroup()
-                .addGap(194, 194, 194)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 505, Short.MAX_VALUE)
         );
 
         jLayeredPane1.add(DrawingPane3D, "card3");
 
         PropertiesPane.setBackground(new java.awt.Color(39, 45, 48));
-        PropertiesPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("VNI-Whimsy", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        PropertiesPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
         PropertiesPane.setForeground(new java.awt.Color(39, 45, 48));
+        PropertiesPane.setFont(new java.awt.Font("VNI-Whimsy", 0, 12)); // NOI18N
 
         tab1.setBackground(new java.awt.Color(255, 255, 255));
         tab1.setForeground(new java.awt.Color(0, 0, 0));
+        tab1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
         LocationPane.setBackground(new java.awt.Color(255, 255, 255));
-        LocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        LocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
         LocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        LocationPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         XLocation.setBackground(new java.awt.Color(255, 255, 255));
         XLocation.setForeground(new java.awt.Color(0, 0, 0));
-        XLocation.setLayout(new java.awt.GridBagLayout());
+        XLocation.setPreferredSize(new java.awt.Dimension(70, 40));
 
         lblLocationXLabel.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
         lblLocationXLabel.setForeground(new java.awt.Color(0, 0, 0));
         lblLocationXLabel.setText("X :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 10.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
-        XLocation.add(lblLocationXLabel, gridBagConstraints);
+        lblLocationXLabel.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel.setPreferredSize(new java.awt.Dimension(18, 16));
+        XLocation.add(lblLocationXLabel);
 
-        lblLocationXValue.setBackground(new java.awt.Color(255, 255, 255));
-        lblLocationXValue.setForeground(new java.awt.Color(0, 0, 0));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 3.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 49);
-        XLocation.add(lblLocationXValue, gridBagConstraints);
+        txtFLocationXValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLocationXValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        XLocation.add(txtFLocationXValue);
+
+        LocationPane.add(XLocation);
 
         YLocation.setBackground(new java.awt.Color(255, 255, 255));
         YLocation.setForeground(new java.awt.Color(0, 0, 0));
-        YLocation.setLayout(new java.awt.GridBagLayout());
+        YLocation.setMinimumSize(new java.awt.Dimension(70, 40));
+        YLocation.setPreferredSize(new java.awt.Dimension(70, 40));
 
         lblLocationYLabel.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
         lblLocationYLabel.setForeground(new java.awt.Color(0, 0, 0));
         lblLocationYLabel.setText("Y :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 10.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
-        YLocation.add(lblLocationYLabel, gridBagConstraints);
+        lblLocationYLabel.setPreferredSize(new java.awt.Dimension(18, 16));
+        YLocation.add(lblLocationYLabel);
 
-        lblLocationYValue.setBackground(new java.awt.Color(255, 255, 255));
-        lblLocationYValue.setForeground(new java.awt.Color(0, 0, 0));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 3.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 49);
-        YLocation.add(lblLocationYValue, gridBagConstraints);
+        txtFLocationYValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLocationYValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        YLocation.add(txtFLocationYValue);
 
-        javax.swing.GroupLayout LocationPaneLayout = new javax.swing.GroupLayout(LocationPane);
-        LocationPane.setLayout(LocationPaneLayout);
-        LocationPaneLayout.setHorizontalGroup(
-            LocationPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LocationPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(XLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(YLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        LocationPaneLayout.setVerticalGroup(
-            LocationPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(XLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(YLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        LocationPane.add(YLocation);
 
         javax.swing.GroupLayout tab1Layout = new javax.swing.GroupLayout(tab1);
         tab1.setLayout(tab1Layout);
@@ -366,31 +262,31 @@ public class MainWindow extends javax.swing.JFrame {
             tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tab1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(LocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addContainerGap())
         );
         tab1Layout.setVerticalGroup(
             tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tab1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(351, Short.MAX_VALUE))
         );
 
         PropertiesPane.addTab("Car", tab1);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 188, Short.MAX_VALUE)
+        javax.swing.GroupLayout tab2Layout = new javax.swing.GroupLayout(tab2);
+        tab2.setLayout(tab2Layout);
+        tab2Layout.setHorizontalGroup(
+            tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 192, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        tab2Layout.setVerticalGroup(
+            tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        PropertiesPane.addTab("tab2", jPanel1);
+        PropertiesPane.addTab("sth else", tab2);
 
         jButton1.setText("Click me");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -399,9 +295,86 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        shapesChoosingBar.setOpaque(false);
+        shapesChoosingBar.setLayout(null);
+
+        btnCar.setBorderPainted(false);
+        btnCar.setContentAreaFilled(false);
+        btnCar.setFocusPainted(false);
+        btnCar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCarMouseClicked(evt);
+            }
+        });
+        btnCar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCarActionPerformed(evt);
+            }
+        });
+        shapesChoosingBar.add(btnCar);
+        btnCar.setBounds(20, 8, 45, 45);
+
+        jPanel2.setOpaque(false);
+
+        btnPlay.setToolTipText("S");
+        btnPlay.setBorderPainted(false);
+        btnPlay.setContentAreaFilled(false);
+        btnPlay.setFocusable(false);
+        btnPlay.setMaximumSize(new java.awt.Dimension(40, 40));
+        btnPlay.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnPlay.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPlayMouseClicked(evt);
+            }
+        });
+
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(btnClear)
+                .addGap(15, 15, 15))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnClear)
+                    .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        separator.setPreferredSize(new java.awt.Dimension(3, 67));
+
+        javax.swing.GroupLayout separatorLayout = new javax.swing.GroupLayout(separator);
+        separator.setLayout(separatorLayout);
+        separatorLayout.setHorizontalGroup(
+            separatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+        separatorLayout.setVerticalGroup(
+            separatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 42, Short.MAX_VALUE)
+        );
+
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
+        mbFileMenu.setFont(new java.awt.Font("HACKED", 0, 12)); // NOI18N
 
+        saveMenuItem.setFont(new java.awt.Font("HACKED", 1, 12)); // NOI18N
         saveMenuItem.setText("Save");
         saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -414,7 +387,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         mbModeMenu.setText("Mode");
         mbModeMenu.setToolTipText("Select dimensional mode");
+        mbModeMenu.setFont(new java.awt.Font("HACKED", 0, 12)); // NOI18N
 
+        _2DMenuItem.setFont(new java.awt.Font("HACKED", 1, 12)); // NOI18N
         _2DMenuItem.setText("2D");
         _2DMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +398,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         mbModeMenu.add(_2DMenuItem);
 
+        _3DMenuItem.setFont(new java.awt.Font("HACKED", 1, 12)); // NOI18N
         _3DMenuItem.setText("3D");
         _3DMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -441,41 +417,46 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SttBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120)
-                .addComponent(btnClear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(54, 54, 54))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(PropertiesPane))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(shapesChoosingBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(5, 5, 5)
+                        .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PropertiesPane)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jButton1)
+                        .addGap(54, 54, 54))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(shapesChoosingBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnClear)
-                                .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnCar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(15, 15, 15)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 2, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -499,15 +480,16 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__3DMenuItemActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearDrawingPanel();
+        //clearDrawingPanel();
+        drawGrid();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarActionPerformed
         System.out.println("??");      
         if (start == true) {
             newCar = new Car(new Point(location, yStarted));
-            this.lblLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
-            this.lblLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
+            this.txtFLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
+            this.txtFLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
             System.out.println(location);
             if (runBack == true) {                
                 this.DrawingPane2D.repaint();
@@ -531,8 +513,8 @@ public class MainWindow extends javax.swing.JFrame {
             location = startingLocation;
             newCar = new Car(new Point(location, yStarted));
             this.DrawingPane2D.repaint();
-            this.lblLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
-            this.lblLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
+            this.txtFLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
+            this.txtFLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
             location += step;   
             exist = true;
     }//GEN-LAST:event_btnCarMouseClicked
@@ -750,6 +732,7 @@ public class MainWindow extends javax.swing.JFrame {
         }; 
         this.btnCar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(memberInfoKeyStroke, "SHOWINFO");
         this.btnCar.getActionMap().put("SHOWINFO", memberInfoAction);
+        
     }  
     
     /**
@@ -811,6 +794,21 @@ public class MainWindow extends javax.swing.JFrame {
             
     }
     
+    public void drawGrid()
+    {
+        Graphics2D grp = (Graphics2D) this.DrawingPane2D.getGraphics();
+        grp.setColor(Color.LIGHT_GRAY);
+        grp.setStroke(new BasicStroke(1));
+        for (int width = 0; width < this.DrawingPane2D.getWidth(); width += 5) {
+                grp.drawLine(width, 0, width, this.DrawingPane2D.getHeight());
+                if (width < this.DrawingPane2D.getHeight()) {
+                grp.drawLine(0, width, this.DrawingPane2D.getWidth(), width);
+            }          
+        }
+        grp.setColor(Color.RED);
+        grp.drawLine(0, this.DrawingPane2D.getHeight()/2 + 3, this.DrawingPane2D.getWidth(), this.DrawingPane2D.getHeight()/2 + 3);
+        grp.drawLine(this.DrawingPane2D.getWidth()/2, 0, this.DrawingPane2D.getWidth()/2, this.DrawingPane2D.getHeight());
+    }
     // </editor-fold> 
      
     // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">
@@ -854,22 +852,21 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnQtmInfo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblLocationXLabel;
-    private javax.swing.JLabel lblLocationXValue;
     private javax.swing.JLabel lblLocationYLabel;
-    private javax.swing.JLabel lblLocationYValue;
     private javax.swing.JLabel lblModeStatus;
     private javax.swing.JLabel lblModeStatusValue;
     private javax.swing.JMenu mbFileMenu;
     private javax.swing.JMenu mbModeMenu;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JPanel separator;
+    private javax.swing.JPanel shapesChoosingBar;
     private javax.swing.JPanel tab1;
+    private javax.swing.JPanel tab2;
+    private javax.swing.JTextField txtFLocationXValue;
+    private javax.swing.JTextField txtFLocationYValue;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 }
