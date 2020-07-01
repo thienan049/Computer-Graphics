@@ -377,6 +377,9 @@
     </Container>
     <Container class="javax.swing.JLayeredPane" name="LayeredDrawingPane">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[800, 500]"/>
         </Property>
@@ -429,6 +432,9 @@
         </Container>
         <Container class="javax.swing.JPanel" name="GridPane">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[800, 500]"/>
             </Property>
@@ -440,7 +446,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()&#xd;&#xa;{&#xd;&#xa;    @Override&#xd;&#xa;    public void paintComponent(Graphics g) &#xd;&#xa;    {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;        g.setColor(Color.LIGHT_GRAY);&#xd;&#xa;        //g.setStroke(new BasicStroke(1));&#xd;&#xa;        for (int width = 0; width &lt; GridPane.getWidth(); width += 6) {&#xd;&#xa;                g.drawLine(width, 0, width, GridPane.getHeight());&#xd;&#xa;                if (width &lt; GridPane.getHeight()) {&#xd;&#xa;                g.drawLine(0, width, GridPane.getWidth(), width);&#xd;&#xa;            }          &#xd;&#xa;        }&#xd;&#xa;        g.setColor(Color.RED);&#xd;&#xa;        g.drawLine(0, GridPane.getHeight()/2 + 2, GridPane.getWidth(), GridPane.getHeight()/2 + 2);&#xd;&#xa;        g.drawLine(GridPane.getWidth()/2 + 2, 0, GridPane.getWidth()/2 + 2, GridPane.getHeight());&#xd;&#xa;    }&#xd;&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel()&#xd;&#xa;{&#xd;&#xa;    @Override&#xd;&#xa;    public void paintComponent(Graphics g) &#xd;&#xa;    {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;        g.setColor(Color.LIGHT_GRAY);&#xd;&#xa;        //g.setStroke(new BasicStroke(1));&#xd;&#xa;        for (int width = 0; width &lt; GridPane.getWidth(); width += 5) {&#xd;&#xa;                g.drawLine(width, 0, width, GridPane.getHeight());&#xd;&#xa;                if (width &lt; GridPane.getHeight()) {&#xd;&#xa;                g.drawLine(0, width, GridPane.getWidth(), width);&#xd;&#xa;            }          &#xd;&#xa;        }&#xd;&#xa;        g.setColor(Color.RED);&#xd;&#xa;        g.drawLine(0, 250, GridPane.getWidth(), 250);&#xd;&#xa;        g.drawLine(400, 0, 400, GridPane.getHeight());&#xd;&#xa;    }&#xd;&#xa;}"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">

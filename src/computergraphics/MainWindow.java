@@ -107,15 +107,15 @@ public class MainWindow extends javax.swing.JFrame {
                 super.paintComponent(g);
                 g.setColor(Color.LIGHT_GRAY);
                 //g.setStroke(new BasicStroke(1));
-                for (int width = 0; width < GridPane.getWidth(); width += 6) {
+                for (int width = 0; width < GridPane.getWidth(); width += 5) {
                     g.drawLine(width, 0, width, GridPane.getHeight());
                     if (width < GridPane.getHeight()) {
                         g.drawLine(0, width, GridPane.getWidth(), width);
                     }          
                 }
                 g.setColor(Color.RED);
-                g.drawLine(0, GridPane.getHeight()/2 + 2, GridPane.getWidth(), GridPane.getHeight()/2 + 2);
-                g.drawLine(GridPane.getWidth()/2 + 2, 0, GridPane.getWidth()/2 + 2, GridPane.getHeight());
+                g.drawLine(0, 250, GridPane.getWidth(), 250);
+                g.drawLine(400, 0, 400, GridPane.getHeight());
             }
         };
         DrawingPane3D = new javax.swing.JPanel()
@@ -206,6 +206,7 @@ public class MainWindow extends javax.swing.JFrame {
         SttBar.add(ModeStatusBar);
         ModeStatusBar.setBounds(798, 7, 92, 16);
 
+        LayeredDrawingPane.setBackground(new java.awt.Color(255, 255, 255));
         LayeredDrawingPane.setMaximumSize(new java.awt.Dimension(800, 500));
         LayeredDrawingPane.setMinimumSize(new java.awt.Dimension(800, 500));
         LayeredDrawingPane.setPreferredSize(new java.awt.Dimension(800, 500));
@@ -229,6 +230,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         LayeredDrawingPane.add(DrawingPane2D, "card2");
 
+        GridPane.setBackground(new java.awt.Color(255, 255, 255));
         GridPane.setMaximumSize(new java.awt.Dimension(800, 500));
         GridPane.setMinimumSize(new java.awt.Dimension(800, 500));
         GridPane.setPreferredSize(new java.awt.Dimension(800, 500));
@@ -585,8 +587,8 @@ public class MainWindow extends javax.swing.JFrame {
         System.out.println("??");      
         if (start == true) {
             newCar = new Car(new Point(location, yStarted));
-            this.txtFLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
-            this.txtFLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
+            this.txtFLocationXValue.setText(String.valueOf(scaledX(newCar.get1stPoint().getX())));
+            this.txtFLocationYValue.setText(String.valueOf(scaledY(newCar.get1stPoint().getY())));
             System.out.println(location);
             if (runBack == true) {                
                 this.DrawingPane2D.repaint();
@@ -597,7 +599,7 @@ public class MainWindow extends javax.swing.JFrame {
             } else {
                 this.DrawingPane2D.repaint();
                 location += step;
-                if (location == stopLocation) {
+                if (location >= stopLocation) {
                     runBack = true;
                 }
             }
@@ -610,8 +612,8 @@ public class MainWindow extends javax.swing.JFrame {
             location = startingLocation;
             newCar = new Car(new Point(location, yStarted));
             this.DrawingPane2D.repaint();
-            this.txtFLocationXValue.setText(String.valueOf((int)newCar.get1stPoint().getX()));
-            this.txtFLocationYValue.setText(String.valueOf((int)newCar.get1stPoint().getY()));
+            this.txtFLocationXValue.setText(String.valueOf(scaledX(newCar.get1stPoint().getX())));
+            this.txtFLocationYValue.setText(String.valueOf(scaledY(newCar.get1stPoint().getY())));
             location += step;   
             exist = true;
     }//GEN-LAST:event_btnCarMouseClicked
@@ -786,7 +788,7 @@ public class MainWindow extends javax.swing.JFrame {
 //        greetingTimer = new Timer(20, greetingAction);
 //        greetingTimer.start();
          
-        greetingTimer = new Timer(10, new ActionListener(){    //Câu chào ở thanh status animation
+        greetingTimer = new Timer(grtTimerDelay, new ActionListener(){    //Câu chào ở thanh status animation
         public void actionPerformed(ActionEvent e) {
             greeting();
         }
@@ -869,13 +871,13 @@ public class MainWindow extends javax.swing.JFrame {
     {
         if (grtRunBack == true) {
             this.SttBar.repaint();
-            grtLocation -= step;
+            grtLocation -= grtStep;
             if (grtLocation == 10) {
                 grtRunBack = false;
             }
         } else {
             this.SttBar.repaint();
-            grtLocation += step;
+            grtLocation += grtStep;
             if (grtLocation == 633) {
                 grtRunBack = true;
             }
@@ -923,14 +925,61 @@ public class MainWindow extends javax.swing.JFrame {
 //        grp.drawLine(this.GridPane.getWidth()/2 + 2, 0, this.GridPane.getWidth()/2 + 2, this.GridPane.getHeight());
 //    }
     // </editor-fold> 
-     
-    // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">
+    
+    // <editor-fold defaultstate="collapsed" desc="Some math calculations">
+    public int round(float num) {
+        return (int) (num + 0.5);
+    }
+
+    public int scaledX(double originalValue) // trả về tọa độ X (làm tròn) theo tỉ lệ 5:1 với gốc TD 400;250
+    {
+        if (originalValue < originX) {
+            return (int) ((originalValue - originX) / 5 - 0.5);
+        } else {
+            return (int) ((originalValue - originX) / 5 + 0.5);
+        }
+    }
+
+    public int scaledY(double originalValue) // trả về tọa độ Y (làm tròn) theo tỉ lệ 5:1 với gốc TD 400;250
+    {
+        if (originalValue < originY) {
+            return (-1) * (int) ((originalValue - originY) / 5 - 0.5);
+        } else {
+            return (-1) * (int) ((originalValue - originY) / 5 + 0.5);
+        }
+    }
+
+    public int xByScaledX(double originalValue) // trả về tọa độ X gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
+    {
+        return originX + 5 * scaledX(originalValue);
+    }
+
+    public int yByScaleY(double originalValue) // trả về tọa độ Y gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
+    {
+        return originY - 5 * scaledY(originalValue);
+    }
+
+//    public Point pointByScale(Point orgPoint) {
+//        int xScaled = xByScaleX(orgPoint.getX());
+//        int yScaled = yByScaleY(orgPoint.getY());
+//        return new Point(xScaled, yScaled);
+//    }
+//
+//    public int reverseScale(int scaleValue) {
+//        return 5 * scaleValue;
+//    }
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">   
+    int originX = 400;   // tâm X
+    int originY = 250;   // tâm Y
+    
     int location = 20;
     int startingLocation = 20;
-    int stopLocation = 350;
-    int step = 1;   
+    int stopLocation = 550;
+    int step = 5;   
     int timerDelay = 5; 
-    int yStarted = 250;
+    int yStarted = 290;
     boolean start = false;
     boolean runBack = false;
     boolean exist = false;
@@ -938,6 +987,8 @@ public class MainWindow extends javax.swing.JFrame {
     Timer timer = null;
     
     int grtLocation = 3;
+    int grtStep = 1;
+    int grtTimerDelay = 10;
     boolean grtRunBack = false; 
     Timer greetingTimer;
      
