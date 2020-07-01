@@ -567,12 +567,12 @@ public class MainWindow extends javax.swing.JFrame {
             this.DrawingPane2D.setVisible(true);
             this.DrawingPane2D.setOpaque(false);
             gridAvailable = true;
-            location -= 1;
+            location -= step;
             this.DrawingPane2D.repaint();
         }else{
 //            this.DrawingPane3D.setVisible(false);
 //            this.DrawingPane2D.setVisible(false);
-            location -= 1;
+            location -= step;
             this.DrawingPane2D.repaint();
             this.GridPane.setVisible(false);   
             this.DrawingPane2D.setVisible(true);
@@ -978,7 +978,7 @@ public class MainWindow extends javax.swing.JFrame {
     int startingLocation = 20;
     int stopLocation = 550;
     int step = 5;   
-    int timerDelay = 5; 
+    int timerDelay = 25; 
     int yStarted = 290;
     boolean start = false;
     boolean runBack = false;
