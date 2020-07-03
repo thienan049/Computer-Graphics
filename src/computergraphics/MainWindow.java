@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package computergraphics;
+import _3dsection.*;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,7 +17,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,10 +27,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -36,7 +43,7 @@ import javax.swing.UIManager;
  *
  * @author AnThien049
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame{
 
     /**
      * Creates new form MainWindow
@@ -49,7 +56,6 @@ public class MainWindow extends javax.swing.JFrame {
         System.out.println(this.DrawingPane3D.getSize());
         System.out.println(this.getSize());
         try  {
-            //drawGrid();
             settingUpSomeFunctionalities();
             customMenubar();
             customChoosingShapesActionsBar();
@@ -58,7 +64,7 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println(e);
         }           
     }
-
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,9 +99,11 @@ public class MainWindow extends javax.swing.JFrame {
                 super.paintComponent(g);
                 if(start == true || pause == true)
                 {
-                    //newCar = new Car(new Point(location, 250));        
+                    //newCar = new Car(new Point(location, 250));  
+                    Graphics2D grp = (Graphics2D) g;
+                    grp.setStroke(new BasicStroke(5));
                     DrawCar draw = new DrawCar(newCar);
-                    draw.drawing((Graphics2D)g, Color.RED);
+                    draw.drawing(grp, Color.RED);
                 }
             }
         };
@@ -105,17 +113,19 @@ public class MainWindow extends javax.swing.JFrame {
             public void paintComponent(Graphics g) 
             {
                 super.paintComponent(g);
-                g.setColor(Color.LIGHT_GRAY);
-                //g.setStroke(new BasicStroke(1));
+                Graphics2D grp = (Graphics2D) g;
+                grp.setColor(Color.LIGHT_GRAY);
+                grp.setStroke(new BasicStroke(1));
                 for (int width = 0; width < GridPane.getWidth(); width += 5) {
-                    g.drawLine(width, 0, width, GridPane.getHeight());
+                    grp.drawLine(width, 0, width, GridPane.getHeight());
                     if (width < GridPane.getHeight()) {
-                        g.drawLine(0, width, GridPane.getWidth(), width);
+                        grp.drawLine(0, width, GridPane.getWidth(), width);
                     }          
                 }
-                g.setColor(Color.RED);
-                g.drawLine(0, 250, GridPane.getWidth(), 250);
-                g.drawLine(400, 0, 400, GridPane.getHeight());
+                grp.setStroke(new BasicStroke(5));
+                grp.setColor(Color.BLUE);
+                grp.drawLine(0, 250 + 2, GridPane.getWidth(), 250 + 2);
+                grp.drawLine(400 + 2, 0, 400 + 2, GridPane.getHeight());
             }
         };
         DrawingPane3D = new javax.swing.JPanel()
@@ -125,16 +135,36 @@ public class MainWindow extends javax.swing.JFrame {
             {
                 super.paintComponent(g);
                 Graphics2D grp = (Graphics2D)g;
-                grp.setStroke(new BasicStroke(2));
+                grp.setStroke(new BasicStroke(5)); 
                 grp.setColor(Color.BLUE);
-                grp.drawLine(300, 0, 300, 250);
-                grp.drawLine(300, 250, 800, 250);
-                grp.drawLine(300, 250, 100, 500);
+                grp.drawLine(400 + 2, 0, 400 + 2, 250);
+                grp.drawLine(400 + 2, 250 + 2, 800 + 2, 250 + 2);
+                grp.drawLine(400 + 3, 250, 155 + 2, 500);
+                Line lineObj = new Line(new Point(400 + 2, 250), new Point(400 + 2, 500));
+                lineObj.drawDashedLinebyDDA(grp, 5, 10);
+                lineObj = new Line(new Point(400, 250 + 2), new Point(0, 250 + 2));
+                lineObj.drawDashedLinebyDDA(grp, 5, 10);
+                //lineObj = new Line(new Point(400, 250), new Point(650, 0));
+                //lineObj.drawDashedLinebyDDA(grp, 5, 4);
+                //lineObj.drawLine(grp);
+                GrAdEx ga = new GrAdEx();
+                ga.setGraphicAdapter(g);
+                switch(chosenShape){
+                    case 1:
+                    MyCube cb = new MyCube();
+                    cb.makeCube(_3dSize.getX(), _3dSize.getY(), _3dSize.getZ());                                
+                    cb.draw(ga);
+                    break;
+                    case 2:
+                    MyPyramid prm = new MyPyramid();
+                    prm.makePyramid(_3dSize.getX(), _3dSize.getY(), _3dSize.getZ());
+                    prm.draw(ga);
+                }
 
             }
         };
         PropertiesPane = new javax.swing.JTabbedPane();
-        tab1 = new javax.swing.JPanel();
+        tabCar = new javax.swing.JPanel();
         LocationPane = new javax.swing.JPanel();
         XLocation = new javax.swing.JPanel();
         lblLocationXLabel = new javax.swing.JLabel();
@@ -142,15 +172,23 @@ public class MainWindow extends javax.swing.JFrame {
         YLocation = new javax.swing.JPanel();
         lblLocationYLabel = new javax.swing.JLabel();
         txtFLocationYValue = new javax.swing.JTextField();
+        SpeedPane = new javax.swing.JPanel();
+        sldSpeed = new javax.swing.JSlider();
+        lblSpeedFPMs = new javax.swing.JLabel();
         tab2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         ShapeActionContainerPane = new javax.swing.JPanel();
+        ShapeAction2DContainerPane = new javax.swing.JPanel();
         shapesChoosingBar = new javax.swing.JPanel();
         btnCar = new javax.swing.JButton();
         actionChoosingBar = new javax.swing.JPanel();
         btnPlay = new javax.swing.JButton();
         btnGrid = new javax.swing.JButton();
         separator = new javax.swing.JPanel();
+        ShapeAction3DContainerPane = new javax.swing.JPanel();
+        btnCube = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        btnPyramid = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         mbFileMenu = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -209,7 +247,6 @@ public class MainWindow extends javax.swing.JFrame {
         LayeredDrawingPane.setBackground(new java.awt.Color(255, 255, 255));
         LayeredDrawingPane.setMaximumSize(new java.awt.Dimension(800, 500));
         LayeredDrawingPane.setMinimumSize(new java.awt.Dimension(800, 500));
-        LayeredDrawingPane.setPreferredSize(new java.awt.Dimension(800, 500));
         LayeredDrawingPane.setLayout(new java.awt.CardLayout());
 
         DrawingPane2D.setBackground(new java.awt.Color(255, 255, 255));
@@ -271,9 +308,9 @@ public class MainWindow extends javax.swing.JFrame {
         PropertiesPane.setForeground(new java.awt.Color(39, 45, 48));
         PropertiesPane.setFont(new java.awt.Font("VNI-Whimsy", 0, 12)); // NOI18N
 
-        tab1.setBackground(new java.awt.Color(255, 255, 255));
-        tab1.setForeground(new java.awt.Color(0, 0, 0));
-        tab1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        tabCar.setBackground(new java.awt.Color(255, 255, 255));
+        tabCar.setForeground(new java.awt.Color(0, 0, 0));
+        tabCar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
         LocationPane.setBackground(new java.awt.Color(255, 255, 255));
         LocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
@@ -294,6 +331,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         txtFLocationXValue.setMinimumSize(new java.awt.Dimension(35, 24));
         txtFLocationXValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLocationXValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLocationXValueActionPerformed(evt);
+            }
+        });
         XLocation.add(txtFLocationXValue);
 
         LocationPane.add(XLocation);
@@ -312,34 +354,64 @@ public class MainWindow extends javax.swing.JFrame {
 
         txtFLocationYValue.setMinimumSize(new java.awt.Dimension(35, 24));
         txtFLocationYValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLocationYValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLocationYValueActionPerformed(evt);
+            }
+        });
         YLocation.add(txtFLocationYValue);
 
         LocationPane.add(YLocation);
 
-        javax.swing.GroupLayout tab1Layout = new javax.swing.GroupLayout(tab1);
-        tab1.setLayout(tab1Layout);
-        tab1Layout.setHorizontalGroup(
-            tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab1Layout.createSequentialGroup()
+        SpeedPane.setBackground(new java.awt.Color(255, 255, 255));
+        SpeedPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Speed", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        SpeedPane.setForeground(new java.awt.Color(0, 0, 0));
+        SpeedPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 13));
+
+        sldSpeed.setMajorTickSpacing(10);
+        sldSpeed.setMinimum(20);
+        sldSpeed.setMinorTickSpacing(1);
+        sldSpeed.setPaintTicks(true);
+        sldSpeed.setValue(80);
+        sldSpeed.setPreferredSize(new java.awt.Dimension(130, 16));
+        sldSpeed.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldSpeedStateChanged(evt);
+            }
+        });
+        SpeedPane.add(sldSpeed);
+
+        lblSpeedFPMs.setPreferredSize(new java.awt.Dimension(30, 16));
+        SpeedPane.add(lblSpeedFPMs);
+
+        javax.swing.GroupLayout tabCarLayout = new javax.swing.GroupLayout(tabCar);
+        tabCar.setLayout(tabCarLayout);
+        tabCarLayout.setHorizontalGroup(
+            tabCarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabCarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(LocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addGroup(tabCarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                    .addComponent(SpeedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        tab1Layout.setVerticalGroup(
-            tab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab1Layout.createSequentialGroup()
+        tabCarLayout.setVerticalGroup(
+            tabCarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabCarLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(353, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(SpeedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(247, Short.MAX_VALUE))
         );
 
-        PropertiesPane.addTab("Car", tab1);
+        PropertiesPane.addTab("Car", null, tabCar, "");
 
         javax.swing.GroupLayout tab2Layout = new javax.swing.GroupLayout(tab2);
         tab2.setLayout(tab2Layout);
         tab2Layout.setHorizontalGroup(
             tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 195, Short.MAX_VALUE)
+            .addGap(0, 198, Short.MAX_VALUE)
         );
         tab2Layout.setVerticalGroup(
             tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,7 +428,10 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         ShapeActionContainerPane.setOpaque(false);
-        ShapeActionContainerPane.setLayout(null);
+        ShapeActionContainerPane.setLayout(new java.awt.CardLayout());
+
+        ShapeAction2DContainerPane.setOpaque(false);
+        ShapeAction2DContainerPane.setLayout(null);
 
         shapesChoosingBar.setOpaque(false);
         shapesChoosingBar.setLayout(null);
@@ -377,12 +452,12 @@ public class MainWindow extends javax.swing.JFrame {
         shapesChoosingBar.add(btnCar);
         btnCar.setBounds(10, 8, 45, 45);
 
-        ShapeActionContainerPane.add(shapesChoosingBar);
-        shapesChoosingBar.setBounds(6, 0, 482, 56);
+        ShapeAction2DContainerPane.add(shapesChoosingBar);
+        shapesChoosingBar.setBounds(0, 0, 482, 56);
 
         actionChoosingBar.setOpaque(false);
 
-        btnPlay.setToolTipText("S");
+        btnPlay.setToolTipText("Play/Stop animation (S)");
         btnPlay.setBorderPainted(false);
         btnPlay.setContentAreaFilled(false);
         btnPlay.setFocusable(false);
@@ -395,6 +470,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnGrid.setToolTipText("Show Grid (G)");
         btnGrid.setFocusPainted(false);
         btnGrid.setPreferredSize(new java.awt.Dimension(40, 40));
         btnGrid.addActionListener(new java.awt.event.ActionListener() {
@@ -424,7 +500,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(0, 0, 0))
         );
 
-        ShapeActionContainerPane.add(actionChoosingBar);
+        ShapeAction2DContainerPane.add(actionChoosingBar);
         actionChoosingBar.setBounds(592, 0, 202, 50);
 
         separator.setBackground(new java.awt.Color(255, 255, 255));
@@ -441,8 +517,63 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 42, Short.MAX_VALUE)
         );
 
-        ShapeActionContainerPane.add(separator);
+        ShapeAction2DContainerPane.add(separator);
         separator.setBounds(577, 8, 3, 42);
+
+        ShapeActionContainerPane.add(ShapeAction2DContainerPane, "card2");
+
+        ShapeAction3DContainerPane.setOpaque(false);
+
+        btnCube.setBorderPainted(false);
+        btnCube.setContentAreaFilled(false);
+        btnCube.setFocusPainted(false);
+        btnCube.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCubeMouseClicked(evt);
+            }
+        });
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        btnPyramid.setBorderPainted(false);
+        btnPyramid.setContentAreaFilled(false);
+        btnPyramid.setFocusPainted(false);
+        btnPyramid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPyramidMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ShapeAction3DContainerPaneLayout = new javax.swing.GroupLayout(ShapeAction3DContainerPane);
+        ShapeAction3DContainerPane.setLayout(ShapeAction3DContainerPaneLayout);
+        ShapeAction3DContainerPaneLayout.setHorizontalGroup(
+            ShapeAction3DContainerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ShapeAction3DContainerPaneLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(btnCube, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPyramid, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(190, 190, 190)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+        ShapeAction3DContainerPaneLayout.setVerticalGroup(
+            ShapeAction3DContainerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ShapeAction3DContainerPaneLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ShapeAction3DContainerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPyramid, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCube, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
+        ShapeActionContainerPane.add(ShapeAction3DContainerPane, "card3");
 
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
@@ -493,17 +624,15 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SttBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(LayeredDrawingPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LayeredDrawingPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addGap(41, 41, 41))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(PropertiesPane))))
+                    .addComponent(PropertiesPane)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -513,17 +642,15 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(15, 15, 15)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6)
+                        .addContainerGap()
+                        .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(LayeredDrawingPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(LayeredDrawingPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(SttBar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -536,33 +663,37 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void _2DMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__2DMenuItemActionPerformed
+        System.out.println("2D mode selected");
         this.lblModeStatusValue.setText("2D");
         this.DrawingPane2D.setVisible(true);
         this.DrawingPane2D.setOpaque(true);
+        this.ShapeAction2DContainerPane.setVisible(true);
         this.GridPane.setVisible(false);
         this.DrawingPane3D.setVisible(false); 
+        this.ShapeAction3DContainerPane.setVisible(false);
         if(gridAvailable == true){
-            this.DrawingPane2D.setVisible(false);
+          //  this.DrawingPane2D.setVisible(false);
             this.GridPane.setVisible(true);   
             this.DrawingPane2D.setVisible(true);
             this.DrawingPane2D.setOpaque(false);
             gridAvailable = true;
-        }
-       
+        }      
     }//GEN-LAST:event__2DMenuItemActionPerformed
 
     private void _3DMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__3DMenuItemActionPerformed
+        System.out.println("3D mode selected");
         this.lblModeStatusValue.setText("3D");
         this.DrawingPane3D.setVisible(true);
+        this.ShapeAction3DContainerPane.setVisible(true);
         this.GridPane.setVisible(false);
         this.DrawingPane2D.setVisible(false);
+        this.ShapeAction2DContainerPane.setVisible(false);
     }//GEN-LAST:event__3DMenuItemActionPerformed
 
     private void btnGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGridActionPerformed
-        System.out.println("why bro");
         if(gridAvailable == false){
-            this.DrawingPane3D.setVisible(false);
-        
+            System.out.println("Grid Enabled");
+            this.DrawingPane3D.setVisible(false);   
             this.GridPane.setVisible(true);   
             this.DrawingPane2D.setVisible(true);
             this.DrawingPane2D.setOpaque(false);
@@ -570,47 +701,56 @@ public class MainWindow extends javax.swing.JFrame {
             location -= step;
             this.DrawingPane2D.repaint();
         }else{
-//            this.DrawingPane3D.setVisible(false);
-//            this.DrawingPane2D.setVisible(false);
+            System.out.println("Grid Disabled");
             location -= step;
             this.DrawingPane2D.repaint();
             this.GridPane.setVisible(false);   
             this.DrawingPane2D.setVisible(true);
             this.DrawingPane2D.setOpaque(true);
             gridAvailable = false;
-        }
-        
-              
+        }             
     }//GEN-LAST:event_btnGridActionPerformed
 
     private void btnCarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarActionPerformed
-        System.out.println("??");      
+        //System.out.println("??");      
         if (start == true) {
-            newCar = new Car(new Point(location, yStarted));
+            newCar = new Car(new Point(location, startLocationY));
             this.txtFLocationXValue.setText(String.valueOf(scaledX(newCar.get1stPoint().getX())));
             this.txtFLocationYValue.setText(String.valueOf(scaledY(newCar.get1stPoint().getY())));
-            System.out.println(location);
-            if (runBack == true) {                
+            this.lblSpeedFPMs.setText(String.valueOf(this.sldSpeed.getValue()));
+           // System.out.println(location);
+            if (runBackX == true) {                
                 this.DrawingPane2D.repaint();
                 location -= step;
-                if (location <= startingLocation) {
-                    runBack = false;
+                if (location <= startLocationX) {
+                    if(startLocationY >= downStopLocationY){
+                        startLocationY -= step * 3;
+                    }else if (startLocationY <= upStopLocationY){
+                        startLocationY += step * 3;
+                    } 
+                    runBackX = false;
                 }
             } else {
                 this.DrawingPane2D.repaint();
                 location += step;
-                if (location >= stopLocation) {
-                    runBack = true;
+                if (location >= stopLocationX) {
+                    if(startLocationY >= downStopLocationY){
+                        startLocationY -= step * 3;
+                    }else if (startLocationY <= upStopLocationY){
+                        startLocationY += step * 3;
+                    }                      
+                    runBackX = true;
                 }
             }
         }                
     }//GEN-LAST:event_btnCarActionPerformed
     
     private void btnCarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCarMouseClicked
-        if (start == false) {  
+        if (start == false) { 
+            System.out.println("Draw car");
             start = true;
-            location = startingLocation;
-            newCar = new Car(new Point(location, yStarted));
+            location = startLocationX;
+            newCar = new Car(new Point(location, startLocationY));
             this.DrawingPane2D.repaint();
             this.txtFLocationXValue.setText(String.valueOf(scaledX(newCar.get1stPoint().getX())));
             this.txtFLocationYValue.setText(String.valueOf(scaledY(newCar.get1stPoint().getY())));
@@ -619,12 +759,15 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCarMouseClicked
 }
     private void btnPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPlayMouseClicked
+        timerDelay = 100 - this.sldSpeed.getValue();
         if(start == false || exist == true){
+            System.out.println("Play animation");
             start = true;
             timer = new Timer(timerDelay, this.btnCar.getActionListeners()[0]);
             timer.start();     
             exist = false;
         } else if (start == true) {
+            System.out.println("Stop animation");
             start = false;   
             pause = true;
             timer.stop(); 
@@ -646,7 +789,7 @@ public class MainWindow extends javax.swing.JFrame {
                                        + "N17DCCN013   Nguyễn Mạnh Bình \n"
                                        + "N17DCCN042  Phạm Phan Đại Hải \n"
                                        + "N17DCCN053  Trương Minh Hoàng \n"
-                                       + "N17DCCN056  Nguyễn Ngọc Huy"
+                                       + "N17DCCN056  Lê Ngọc Huy"
                                        ,JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, scaledPePeIcon); 
         op.setBackground(Color.WHITE);
         getComponents(op);
@@ -660,6 +803,92 @@ public class MainWindow extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         gottaSeeitManxD();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //NhapToaDo3D ntd = new NhapToaDo3D("Cube");
+        new GUI().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void sldSpeedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldSpeedStateChanged
+        timerDelay = 100 - this.sldSpeed.getValue();
+        this.lblSpeedFPMs.setText(String.valueOf(this.sldSpeed.getValue()));
+        System.out.println(this.sldSpeed.getValue());
+        if(timer != null){
+            timer.stop();
+            timer = new Timer(timerDelay, this.btnCar.getActionListeners()[0]);
+            timer.start();
+        }       
+    }//GEN-LAST:event_sldSpeedStateChanged
+
+    private void txtFLocationXValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLocationXValueActionPerformed
+        String x = this.txtFLocationXValue.getText();
+        String y = this.txtFLocationYValue.getText();
+        if(!x.isBlank() && !y.isBlank() && x.matches("-?\\d+") && y.matches("-?\\d+")){
+            System.out.println("gg");
+            location = xByScaledX(Integer.parseInt(x));
+            startLocationY = yByScaleY(Integer.parseInt(y));
+             {  
+                start = true;
+                exist = true;
+                newCar = new Car(new Point(location, startLocationY));
+                this.DrawingPane2D.repaint();
+                location += step;     
+            }
+            //start = false;
+        }else{
+            JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ", "Invalid value", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtFLocationXValueActionPerformed
+
+    private void txtFLocationYValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLocationYValueActionPerformed
+        txtFLocationXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFLocationYValueActionPerformed
+
+    private void btnCubeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCubeMouseClicked
+        chosenShape = 1;
+        JTextField xField = new JTextField(5);
+        JTextField yField = new JTextField(5);
+        JTextField zField = new JTextField(5);
+        
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("Nhập x:"));
+        myPanel.add(xField);
+        myPanel.add(new JLabel("Nhập y:"));
+        myPanel.add(yField);
+        myPanel.add(new JLabel("Nhập z:"));
+        myPanel.add(zField);
+
+        int result = JOptionPane.showConfirmDialog(this, myPanel, "Nhập tọa độ X and Y and Z", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            _3dSize.setX(Integer.parseInt(xField.getText()));
+            _3dSize.setY(Integer.parseInt(yField.getText()));
+            _3dSize.setZ(Integer.parseInt(zField.getText()));
+        }
+        this.DrawingPane3D.repaint();
+    }//GEN-LAST:event_btnCubeMouseClicked
+
+    private void btnPyramidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPyramidMouseClicked
+        chosenShape = 2;
+        JTextField xField = new JTextField(5);
+        JTextField yField = new JTextField(5);
+        JTextField zField = new JTextField(5);
+        
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("Nhập x:"));
+        myPanel.add(xField);
+        myPanel.add(new JLabel("Nhập y:"));
+        myPanel.add(yField);
+        myPanel.add(new JLabel("Nhập z:"));
+        myPanel.add(zField);
+
+        int result = JOptionPane.showConfirmDialog(this, myPanel, "Nhập tọa độ X and Y and Z", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            _3dSize.setX(Integer.parseInt(xField.getText()));
+            _3dSize.setY(Integer.parseInt(yField.getText()));
+            _3dSize.setZ(Integer.parseInt(zField.getText()));
+        }
+        this.DrawingPane3D.repaint();
+    }//GEN-LAST:event_btnPyramidMouseClicked
     // </editor-fold>          
     
     // <editor-fold defaultstate="collapsed" desc="Components Customizing"> 
@@ -668,9 +897,9 @@ public class MainWindow extends javax.swing.JFrame {
      * Custom menu bar 
      */
     public void customMenubar() throws IOException
-    {
+    { 
         /**
-        * File menu 
+        * File menu  
         */
         this.mbFileMenu.setMnemonic(KeyEvent.VK_F);
         
@@ -737,6 +966,18 @@ public class MainWindow extends javax.swing.JFrame {
         newImg = image.getScaledInstance(this.btnGrid.getWidth(), this.btnGrid.getHeight(), java.awt.Image.SCALE_SMOOTH); 
         ImageIcon scaledGridIcon = new ImageIcon(newImg);
         this.btnGrid.setIcon(scaledGridIcon);
+        
+        icon = new ImageIcon("images/cube_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnCube.getWidth(), this.btnCube.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledCubeIcon = new ImageIcon(newImg);
+        this.btnCube.setIcon(scaledCubeIcon);
+        
+        icon = new ImageIcon("images/pyramid_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnPyramid.getWidth(), this.btnPyramid.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledPyramidIcon = new ImageIcon(newImg);
+        this.btnPyramid.setIcon(scaledPyramidIcon);
     }
     
     /**
@@ -766,11 +1007,11 @@ public class MainWindow extends javax.swing.JFrame {
         * Setting up some properties for main window
         */
         //this.getContentPane().setBackground(new Color(60, 63, 65)); // Set màu nền của contentPane của frame
-        try{
+        try {
             BufferedImage myImage = ImageIO.read(new File("images/bg.jpg"));
-            Image myyImage = myImage.getScaledInstance(1021, 669, java.awt.Image.SCALE_SMOOTH); 
-            this.setContentPane(new BackgroundImage(myyImage));      
-        } catch(Exception e){System.out.println(e);}
+            Image bgrImage = myImage.getScaledInstance(1021, 669, java.awt.Image.SCALE_SMOOTH); 
+            this.setContentPane(new BackgroundImage(bgrImage));      
+        } catch(IOException e){System.out.println(e);}
     }
     
     public void settingUpSomeFunctionalities()
@@ -808,6 +1049,15 @@ public class MainWindow extends javax.swing.JFrame {
         this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         this.getRootPane().getActionMap().put("ESCAPE", escapeAction);
         
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    System.out.println("rwebvb");
+                    e.consume();
+                }
+            }
+        });
         KeyStroke playStopKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, 0);  //S để play/stop animation
         Action playStopAction = new AbstractAction() {
            public void actionPerformed(ActionEvent e) {
@@ -908,7 +1158,7 @@ public class MainWindow extends javax.swing.JFrame {
             this.ShapeActionContainerPane.setVisible(true);
         }        
     }
-    
+             
 //    public void drawGrid()
 //    {
 //        Graphics2D grp = (Graphics2D) this.GridPane.getGraphics();
@@ -951,12 +1201,12 @@ public class MainWindow extends javax.swing.JFrame {
 
     public int xByScaledX(double originalValue) // trả về tọa độ X gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
     {
-        return originX + 5 * scaledX(originalValue);
+        return originX + 5 * (int)originalValue + 2/*scaledX(originalValue)*/;
     }
 
     public int yByScaleY(double originalValue) // trả về tọa độ Y gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
     {
-        return originY - 5 * scaledY(originalValue);
+        return originY - 5 * (int)originalValue + 2/*scaledY(originalValue)*/;
     }
 
 //    public Point pointByScale(Point orgPoint) {
@@ -965,23 +1215,27 @@ public class MainWindow extends javax.swing.JFrame {
 //        return new Point(xScaled, yScaled);
 //    }
 //
-//    public int reverseScale(int scaleValue) {
-//        return 5 * scaleValue;
-//    }
+    public int reverseScale(int scaleValue) {
+        return 5 * scaleValue + 3;
+    }
     // </editor-fold> 
+    
     
     // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">   
     int originX = 400;   // tâm X
     int originY = 250;   // tâm Y
     
-    int location = 20;
-    int startingLocation = 20;
-    int stopLocation = 550;
+    int location = 20 - 3;
+    int startLocationX = 20 - 3;
+    int stopLocationX = 550 - 3;
+    int upStopLocationY = 100;
+    int downStopLocationY = 400;
     int step = 5;   
-    int timerDelay = 25; 
-    int yStarted = 290;
+    int timerDelay;
+    int startLocationY = 290 + 2;
     boolean start = false;
-    boolean runBack = false;
+    boolean runBackX = false;
+    boolean runBackY = false;
     boolean exist = false;
     boolean pause = false;
     Timer timer = null;
@@ -998,7 +1252,9 @@ public class MainWindow extends javax.swing.JFrame {
     
     Car newCar;
     
+    int chosenShape = 0;
     boolean gridAvailable = false;
+    _3dShapesSize _3dSize = new _3dShapesSize();
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Global application variables declaration">
@@ -1011,7 +1267,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel ModeStatusBar;
     private javax.swing.JTabbedPane PropertiesPane;
+    private javax.swing.JPanel ShapeAction2DContainerPane;
+    private javax.swing.JPanel ShapeAction3DContainerPane;
     private javax.swing.JPanel ShapeActionContainerPane;
+    private javax.swing.JPanel SpeedPane;
     private javax.swing.JPanel SttBar;
     private javax.swing.JPanel XLocation;
     private javax.swing.JPanel YLocation;
@@ -1019,21 +1278,26 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem _3DMenuItem;
     private javax.swing.JPanel actionChoosingBar;
     private javax.swing.JButton btnCar;
+    private javax.swing.JButton btnCube;
     private javax.swing.JButton btnGrid;
     private javax.swing.JButton btnPlay;
+    private javax.swing.JButton btnPyramid;
     private javax.swing.JButton btnQtmInfo;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel lblLocationXLabel;
     private javax.swing.JLabel lblLocationYLabel;
     private javax.swing.JLabel lblModeStatus;
     private javax.swing.JLabel lblModeStatusValue;
+    private javax.swing.JLabel lblSpeedFPMs;
     private javax.swing.JMenu mbFileMenu;
     private javax.swing.JMenu mbModeMenu;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JPanel separator;
     private javax.swing.JPanel shapesChoosingBar;
-    private javax.swing.JPanel tab1;
+    private javax.swing.JSlider sldSpeed;
     private javax.swing.JPanel tab2;
+    private javax.swing.JPanel tabCar;
     private javax.swing.JTextField txtFLocationXValue;
     private javax.swing.JTextField txtFLocationYValue;
     // End of variables declaration//GEN-END:variables

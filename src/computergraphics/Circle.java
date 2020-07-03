@@ -68,7 +68,7 @@ public class Circle
     public void drawCircle(Graphics2D grp) {
         
         //grp.setColor(Color.RED);
-        grp.setStroke(new BasicStroke(2));
+        //grp.setStroke(new BasicStroke(2));
 
         int xDraw = 0;
         int centerX = (int)this.centerPoint.getX();

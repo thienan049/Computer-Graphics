@@ -27,7 +27,7 @@ public class DrawCar {
     public void drawing(Graphics2D grp, Color color)
     {
         grp.setColor(color);
-        grp.setStroke(new BasicStroke(2));
+       // grp.setStroke(new BasicStroke(2));
         //y = mx + b -> y = y + m
         int _1stPointX = (int) this.car.get1stPoint().getX();
         int _1stPointY = (int) this.car.get1stPoint().getY();

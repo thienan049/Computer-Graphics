@@ -51,7 +51,7 @@ public class Rectangle
     public void drawRectangleByDiagonalLine(Graphics2D grp) {
         
         //grp.setColor(Color.RED);
-        grp.setStroke(new BasicStroke(2));
+        //grp.setStroke(new BasicStroke(2));
         //y = mx + b -> y = y + m
         int _1stPointX = (int) _1stDiagPoint.getX();
         int _1stPointY = (int) _1stDiagPoint.getY();
