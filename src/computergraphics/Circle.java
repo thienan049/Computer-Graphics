@@ -54,15 +54,25 @@ public class Circle
 //        } catch (Exception e) {
 //        }
 
-        grp.drawLine(xDraw + centerX, centerY + yDraw, xDraw + centerX, centerY + yDraw);//(x,-y)
-        grp.drawLine(xDraw + centerX, centerY - yDraw, xDraw + centerX, centerY - yDraw);//(x,y)
-        grp.drawLine(-xDraw + centerX, centerY + yDraw, -xDraw  + centerX, centerY + yDraw);//(-x,-y)
-        grp.drawLine(-xDraw + centerX, centerY - yDraw, -xDraw  + centerX, centerY - yDraw);//(-x,y)
+//        grp.drawLine(xDraw + centerX, centerY + yDraw, xDraw + centerX, centerY + yDraw);//(x,-y)
+//        grp.drawLine(xDraw + centerX, centerY - yDraw, xDraw + centerX, centerY - yDraw);//(x,y)
+//        grp.drawLine(-xDraw + centerX, centerY + yDraw, -xDraw  + centerX, centerY + yDraw);//(-x,-y)
+//        grp.drawLine(-xDraw + centerX, centerY - yDraw, -xDraw  + centerX, centerY - yDraw);//(-x,y)
+//        
+//        grp.drawLine(centerX + yDraw, xDraw + centerY, centerX + yDraw, xDraw + centerY);//(y,-x)
+//        grp.drawLine(centerX + yDraw, -xDraw + centerY, centerX + yDraw, -xDraw + centerY);//(y,x)
+//        grp.drawLine(centerX - yDraw, xDraw + centerY, centerX - yDraw, xDraw + centerY);//(-y,-x)
+//        grp.drawLine(centerX - yDraw, -xDraw + centerY, centerX - yDraw, -xDraw + centerY);//(-y,x)
         
-        grp.drawLine(centerX + yDraw, xDraw + centerY, centerX + yDraw, xDraw + centerY);//(y,-x)
-        grp.drawLine(centerX + yDraw, -xDraw + centerY, centerX + yDraw, -xDraw + centerY);//(y,x)
-        grp.drawLine(centerX - yDraw, xDraw + centerY, centerX - yDraw, xDraw + centerY);//(-y,-x)
-        grp.drawLine(centerX - yDraw, -xDraw + centerY, centerX - yDraw, -xDraw + centerY);//(-y,x)
+        grp.fillRect(xDraw + centerX, centerY + yDraw, 5, 5);//(x,-y)
+        grp.fillRect(xDraw + centerX, centerY - yDraw, 5, 5);//(x,y)
+        grp.fillRect(-xDraw + centerX, centerY + yDraw, 5, 5);//(-x,-y)
+        grp.fillRect(-xDraw + centerX, centerY - yDraw, 5, 5);//(-x,y)
+        
+        grp.fillRect(centerX + yDraw, xDraw + centerY, 5, 5);//(y,-x)
+        grp.fillRect(centerX + yDraw, -xDraw + centerY, 5, 5);//(y,x)
+        grp.fillRect(centerX - yDraw, xDraw + centerY, 5, 5);//(-y,-x)
+        grp.fillRect(centerX - yDraw, -xDraw + centerY, 5, 5);//(-y,x)
     }
 
     public void drawCircle(Graphics2D grp) {

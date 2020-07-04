@@ -4,25 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/MyPyramid.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/3dsection/GUI.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/GUI.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Paint1.java</file>
+            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/clock/UI.java</file>
+            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/_2dShapesSize.java</file>
+            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/clock/Clock.java</file>
+            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/clock/Circle.java</file>
             <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/MainWindow.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/NhapToaDo3D.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Information.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/GrAdEx.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/Car.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/Line.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/GraphicAdapter.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/Circle.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/Rectangle.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/MyLine.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Hinh2D.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Paint.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Hinh3D.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/computergraphics/DrawCar.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/MyCube.java</file>
-            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/_3dsection/Paint_2D.java</file>
+            <file>file:/D:/Docs/Projects/Java/ComputerGraphics/src/clock/Paint2D.java</file>
         </group>
     </open-files>
 </project-private>

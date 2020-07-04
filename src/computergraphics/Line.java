@@ -73,7 +73,8 @@ public class Line
         int count = 0;
 
         while (count <= step) {
-            grp.drawLine(round(xNext), round(yNext), round(xNext), round(yNext));
+            //grp.drawLine(round(xNext), round(yNext), round(xNext), round(yNext));
+            grp.fillRect(round(xNext), round(yNext), 5, 5);
             yNext += yStep;
             xNext += xStep;
             count++;

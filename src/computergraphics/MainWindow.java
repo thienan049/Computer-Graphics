@@ -5,6 +5,8 @@
  */
 package computergraphics;
 import _3dsection.*;
+import clock.*;
+import static clock.Paint2D.window;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,9 +35,11 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
@@ -97,13 +103,47 @@ public class MainWindow extends javax.swing.JFrame{
             public void paintComponent(Graphics g) 
             {
                 super.paintComponent(g);
-                if(start == true || pause == true)
-                {
-                    //newCar = new Car(new Point(location, 250));  
-                    Graphics2D grp = (Graphics2D) g;
-                    grp.setStroke(new BasicStroke(5));
-                    DrawCar draw = new DrawCar(newCar);
-                    draw.drawing(grp, Color.RED);
+                Graphics2D grp = (Graphics2D) g;
+                //grp.setStroke(new BasicStroke(5));
+
+                switch(chosen2DShape){
+                    case 1:
+                    if(start == true || pause == true){
+                        //newCar = new Car(new Point(location, 250));           
+                        DrawCar draw = new DrawCar(newCar);
+                        draw.drawing(grp, Color.RED);
+                    }
+                    break;
+                    case 2:
+                    newRect = new Rectangle(new Point(_2dSize.getA(), _2dSize.getB()), new Point(_2dSize.getC(), _2dSize.getD()));
+                    newRect.drawRectangleByDiagonalLine(grp);
+                    break;
+                    case 3:
+                    newCirc = new Circle(new Point(_2dCircleSize.getxO(), _2dCircleSize.getyO()), _2dCircleSize.getR());
+                    newCirc.drawCircle(grp);
+                    break;
+                    case 4:
+                    newLine = new Line(new Point(_2dSize.getA(), _2dSize.getB()), new Point(_2dSize.getC(), _2dSize.getD()));
+                    newLine.drawLine(grp);
+                    break;
+                    case 5:
+                    newEllipse = new Ellipse(new Point(_2dEllSize.getA(), _2dEllSize.getB()), _2dEllSize.getC(), _2dEllSize.getD());
+                    newEllipse.drawEllipse(grp);
+                    break;
+                    case 6:
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                    clockRun(g2d);
+                    analogClock.Draw(g2d, Dashes.Solid);
+                    analogClock.seconsLine.end = CommonExtensions.ToComputerCoordinates(new Point(0, 28));
+                    analogClock.minutesLine.end = CommonExtensions.ToComputerCoordinates(new Point(0, 25));
+                    analogClock.hoursLine.end = CommonExtensions.ToComputerCoordinates(new Point(0, 20));
+
+                    // grid = new Grid2D(null, g2d);
+                    // grid.Draw(g2d);
+                    //  borderClock.Draw(g2d, Dashes.Solid);
+                    break;
                 }
             }
         };
@@ -149,7 +189,7 @@ public class MainWindow extends javax.swing.JFrame{
                 //lineObj.drawLine(grp);
                 GrAdEx ga = new GrAdEx();
                 ga.setGraphicAdapter(g);
-                switch(chosenShape){
+                switch(chosen3DShape){
                     case 1:
                     MyCube cb = new MyCube();
                     cb.makeCube(_3dSize.getX(), _3dSize.getY(), _3dSize.getZ());                                
@@ -165,30 +205,88 @@ public class MainWindow extends javax.swing.JFrame{
         };
         PropertiesPane = new javax.swing.JTabbedPane();
         tabCar = new javax.swing.JPanel();
-        LocationPane = new javax.swing.JPanel();
+        CarLocationPane = new javax.swing.JPanel();
         XLocation = new javax.swing.JPanel();
         lblLocationXLabel = new javax.swing.JLabel();
         txtFLocationXValue = new javax.swing.JTextField();
         YLocation = new javax.swing.JPanel();
         lblLocationYLabel = new javax.swing.JLabel();
         txtFLocationYValue = new javax.swing.JTextField();
-        SpeedPane = new javax.swing.JPanel();
+        CarSpeedPane = new javax.swing.JPanel();
         sldSpeed = new javax.swing.JSlider();
         lblSpeedFPMs = new javax.swing.JLabel();
-        tab2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        tabRect = new javax.swing.JPanel();
+        RectLocationPane = new javax.swing.JPanel();
+        rectX1Location = new javax.swing.JPanel();
+        lblLocationXLabel1 = new javax.swing.JLabel();
+        txtFRectX1Value = new javax.swing.JTextField();
+        rectY1Location = new javax.swing.JPanel();
+        lblLocationYLabel1 = new javax.swing.JLabel();
+        txtFRectY1Value = new javax.swing.JTextField();
+        rectX2Location = new javax.swing.JPanel();
+        lblLocationXLabel2 = new javax.swing.JLabel();
+        txtFRectX2Value = new javax.swing.JTextField();
+        rectY2Location = new javax.swing.JPanel();
+        lblLocationYLabel2 = new javax.swing.JLabel();
+        txtFRectY2Value = new javax.swing.JTextField();
+        tabCircle = new javax.swing.JPanel();
+        CircLocationPane = new javax.swing.JPanel();
+        circXLocation = new javax.swing.JPanel();
+        lblLocationXLabel5 = new javax.swing.JLabel();
+        txtFcircXValue = new javax.swing.JTextField();
+        circYLocation = new javax.swing.JPanel();
+        lblLocationYLabel4 = new javax.swing.JLabel();
+        txtFcircYValue = new javax.swing.JTextField();
+        circRadius = new javax.swing.JPanel();
+        lblLocationXLabel6 = new javax.swing.JLabel();
+        txtFcircRValue = new javax.swing.JTextField();
+        tabLine = new javax.swing.JPanel();
+        LineLocationPane = new javax.swing.JPanel();
+        lineX1Location = new javax.swing.JPanel();
+        lblLocationXLabel3 = new javax.swing.JLabel();
+        txtFLineX1Value = new javax.swing.JTextField();
+        lineY1Location = new javax.swing.JPanel();
+        lblLocationYLabel3 = new javax.swing.JLabel();
+        txtFLineY1Value = new javax.swing.JTextField();
+        lineX2Location = new javax.swing.JPanel();
+        lblLocationXLabel4 = new javax.swing.JLabel();
+        txtFLineX2Value = new javax.swing.JTextField();
+        lineY2Location = new javax.swing.JPanel();
+        lblLocationYLabel5 = new javax.swing.JLabel();
+        txtFLineY2Value = new javax.swing.JTextField();
+        tabClock = new javax.swing.JPanel();
+        tabEllipse = new javax.swing.JPanel();
+        EllipseLocationPane = new javax.swing.JPanel();
+        ellXLocation = new javax.swing.JPanel();
+        lblLocationXLabel7 = new javax.swing.JLabel();
+        txtFEllXValue = new javax.swing.JTextField();
+        ellYLocation = new javax.swing.JPanel();
+        lblLocationYLabel6 = new javax.swing.JLabel();
+        txtFEllYValue = new javax.swing.JTextField();
+        ellRadius1 = new javax.swing.JPanel();
+        lblLocationXLabel8 = new javax.swing.JLabel();
+        txtFEllR1Value = new javax.swing.JTextField();
+        ellRadius2 = new javax.swing.JPanel();
+        lblLocationYLabel7 = new javax.swing.JLabel();
+        txtFEllR2Value = new javax.swing.JTextField();
+        btnLMAO = new javax.swing.JButton();
         ShapeActionContainerPane = new javax.swing.JPanel();
         ShapeAction2DContainerPane = new javax.swing.JPanel();
         shapesChoosingBar = new javax.swing.JPanel();
         btnCar = new javax.swing.JButton();
+        btnRect = new javax.swing.JButton();
+        btnCirc = new javax.swing.JButton();
+        btnLine = new javax.swing.JButton();
+        btnEllipse = new javax.swing.JButton();
+        btnClock = new javax.swing.JButton();
         actionChoosingBar = new javax.swing.JPanel();
         btnPlay = new javax.swing.JButton();
         btnGrid = new javax.swing.JButton();
         separator = new javax.swing.JPanel();
         ShapeAction3DContainerPane = new javax.swing.JPanel();
         btnCube = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         btnPyramid = new javax.swing.JButton();
+        btnTest = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         mbFileMenu = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -303,7 +401,7 @@ public class MainWindow extends javax.swing.JFrame{
 
         LayeredDrawingPane.add(DrawingPane3D, "card3");
 
-        PropertiesPane.setBackground(new java.awt.Color(39, 45, 48));
+        PropertiesPane.setBackground(new java.awt.Color(255, 255, 255));
         PropertiesPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
         PropertiesPane.setForeground(new java.awt.Color(39, 45, 48));
         PropertiesPane.setFont(new java.awt.Font("VNI-Whimsy", 0, 12)); // NOI18N
@@ -312,10 +410,10 @@ public class MainWindow extends javax.swing.JFrame{
         tabCar.setForeground(new java.awt.Color(0, 0, 0));
         tabCar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
-        LocationPane.setBackground(new java.awt.Color(255, 255, 255));
-        LocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-        LocationPane.setForeground(new java.awt.Color(0, 0, 0));
-        LocationPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        CarLocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        CarLocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        CarLocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        CarLocationPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         XLocation.setBackground(new java.awt.Color(255, 255, 255));
         XLocation.setForeground(new java.awt.Color(0, 0, 0));
@@ -338,7 +436,7 @@ public class MainWindow extends javax.swing.JFrame{
         });
         XLocation.add(txtFLocationXValue);
 
-        LocationPane.add(XLocation);
+        CarLocationPane.add(XLocation);
 
         YLocation.setBackground(new java.awt.Color(255, 255, 255));
         YLocation.setForeground(new java.awt.Color(0, 0, 0));
@@ -361,15 +459,14 @@ public class MainWindow extends javax.swing.JFrame{
         });
         YLocation.add(txtFLocationYValue);
 
-        LocationPane.add(YLocation);
+        CarLocationPane.add(YLocation);
 
-        SpeedPane.setBackground(new java.awt.Color(255, 255, 255));
-        SpeedPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Speed", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-        SpeedPane.setForeground(new java.awt.Color(0, 0, 0));
-        SpeedPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 13));
+        CarSpeedPane.setBackground(new java.awt.Color(255, 255, 255));
+        CarSpeedPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Speed", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        CarSpeedPane.setForeground(new java.awt.Color(0, 0, 0));
+        CarSpeedPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 13));
 
         sldSpeed.setMajorTickSpacing(10);
-        sldSpeed.setMinimum(20);
         sldSpeed.setMinorTickSpacing(1);
         sldSpeed.setPaintTicks(true);
         sldSpeed.setValue(80);
@@ -379,10 +476,10 @@ public class MainWindow extends javax.swing.JFrame{
                 sldSpeedStateChanged(evt);
             }
         });
-        SpeedPane.add(sldSpeed);
+        CarSpeedPane.add(sldSpeed);
 
         lblSpeedFPMs.setPreferredSize(new java.awt.Dimension(30, 16));
-        SpeedPane.add(lblSpeedFPMs);
+        CarSpeedPane.add(lblSpeedFPMs);
 
         javax.swing.GroupLayout tabCarLayout = new javax.swing.GroupLayout(tabCar);
         tabCar.setLayout(tabCarLayout);
@@ -391,39 +488,490 @@ public class MainWindow extends javax.swing.JFrame{
             .addGroup(tabCarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(tabCarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                    .addComponent(SpeedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                    .addComponent(CarLocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                    .addComponent(CarSpeedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
                 .addContainerGap())
         );
         tabCarLayout.setVerticalGroup(
             tabCarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabCarLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addComponent(LocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CarLocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
-                .addComponent(SpeedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(247, Short.MAX_VALUE))
+                .addComponent(CarSpeedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         PropertiesPane.addTab("Car", null, tabCar, "");
 
-        javax.swing.GroupLayout tab2Layout = new javax.swing.GroupLayout(tab2);
-        tab2.setLayout(tab2Layout);
-        tab2Layout.setHorizontalGroup(
-            tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        tabRect.setBackground(new java.awt.Color(255, 255, 255));
+
+        RectLocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        RectLocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        RectLocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        RectLocationPane.setLayout(new java.awt.GridLayout(2, 0));
+
+        rectX1Location.setBackground(new java.awt.Color(255, 255, 255));
+        rectX1Location.setForeground(new java.awt.Color(0, 0, 0));
+        rectX1Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel1.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel1.setText("X :");
+        lblLocationXLabel1.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel1.setPreferredSize(new java.awt.Dimension(18, 16));
+        rectX1Location.add(lblLocationXLabel1);
+
+        txtFRectX1Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFRectX1Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFRectX1Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFRectX1ValueActionPerformed(evt);
+            }
+        });
+        rectX1Location.add(txtFRectX1Value);
+
+        RectLocationPane.add(rectX1Location);
+
+        rectY1Location.setBackground(new java.awt.Color(255, 255, 255));
+        rectY1Location.setForeground(new java.awt.Color(0, 0, 0));
+        rectY1Location.setMinimumSize(new java.awt.Dimension(70, 40));
+        rectY1Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel1.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel1.setText("Y :");
+        lblLocationYLabel1.setPreferredSize(new java.awt.Dimension(18, 16));
+        rectY1Location.add(lblLocationYLabel1);
+
+        txtFRectY1Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFRectY1Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFRectY1Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFRectY1ValueActionPerformed(evt);
+            }
+        });
+        rectY1Location.add(txtFRectY1Value);
+
+        RectLocationPane.add(rectY1Location);
+
+        rectX2Location.setBackground(new java.awt.Color(255, 255, 255));
+        rectX2Location.setForeground(new java.awt.Color(0, 0, 0));
+        rectX2Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel2.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel2.setText("X :");
+        lblLocationXLabel2.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel2.setPreferredSize(new java.awt.Dimension(18, 16));
+        rectX2Location.add(lblLocationXLabel2);
+
+        txtFRectX2Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFRectX2Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFRectX2Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFRectX2ValueActionPerformed(evt);
+            }
+        });
+        rectX2Location.add(txtFRectX2Value);
+
+        RectLocationPane.add(rectX2Location);
+
+        rectY2Location.setBackground(new java.awt.Color(255, 255, 255));
+        rectY2Location.setForeground(new java.awt.Color(0, 0, 0));
+        rectY2Location.setMinimumSize(new java.awt.Dimension(70, 40));
+        rectY2Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel2.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel2.setText("Y :");
+        lblLocationYLabel2.setPreferredSize(new java.awt.Dimension(18, 16));
+        rectY2Location.add(lblLocationYLabel2);
+
+        txtFRectY2Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFRectY2Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFRectY2Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFRectY2ValueActionPerformed(evt);
+            }
+        });
+        rectY2Location.add(txtFRectY2Value);
+
+        RectLocationPane.add(rectY2Location);
+
+        javax.swing.GroupLayout tabRectLayout = new javax.swing.GroupLayout(tabRect);
+        tabRect.setLayout(tabRectLayout);
+        tabRectLayout.setHorizontalGroup(
+            tabRectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabRectLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(RectLocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        tabRectLayout.setVerticalGroup(
+            tabRectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabRectLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(RectLocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(302, Short.MAX_VALUE))
+        );
+
+        PropertiesPane.addTab("Rectangle", tabRect);
+
+        tabCircle.setBackground(new java.awt.Color(255, 255, 255));
+
+        CircLocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        CircLocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        CircLocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        CircLocationPane.setLayout(new java.awt.GridLayout(2, 0));
+
+        circXLocation.setBackground(new java.awt.Color(255, 255, 255));
+        circXLocation.setForeground(new java.awt.Color(0, 0, 0));
+        circXLocation.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel5.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel5.setText("X :");
+        lblLocationXLabel5.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel5.setPreferredSize(new java.awt.Dimension(18, 16));
+        circXLocation.add(lblLocationXLabel5);
+
+        txtFcircXValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFcircXValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFcircXValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFcircXValueActionPerformed(evt);
+            }
+        });
+        circXLocation.add(txtFcircXValue);
+
+        CircLocationPane.add(circXLocation);
+
+        circYLocation.setBackground(new java.awt.Color(255, 255, 255));
+        circYLocation.setForeground(new java.awt.Color(0, 0, 0));
+        circYLocation.setMinimumSize(new java.awt.Dimension(70, 40));
+        circYLocation.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel4.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel4.setText("Y :");
+        lblLocationYLabel4.setPreferredSize(new java.awt.Dimension(18, 16));
+        circYLocation.add(lblLocationYLabel4);
+
+        txtFcircYValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFcircYValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFcircYValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFcircYValueActionPerformed(evt);
+            }
+        });
+        circYLocation.add(txtFcircYValue);
+
+        CircLocationPane.add(circYLocation);
+
+        circRadius.setBackground(new java.awt.Color(255, 255, 255));
+        circRadius.setForeground(new java.awt.Color(0, 0, 0));
+        circRadius.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel6.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel6.setText("R :");
+        lblLocationXLabel6.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel6.setPreferredSize(new java.awt.Dimension(18, 16));
+        circRadius.add(lblLocationXLabel6);
+
+        txtFcircRValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFcircRValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFcircRValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFcircRValueActionPerformed(evt);
+            }
+        });
+        circRadius.add(txtFcircRValue);
+
+        CircLocationPane.add(circRadius);
+
+        javax.swing.GroupLayout tabCircleLayout = new javax.swing.GroupLayout(tabCircle);
+        tabCircle.setLayout(tabCircleLayout);
+        tabCircleLayout.setHorizontalGroup(
+            tabCircleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabCircleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CircLocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        tabCircleLayout.setVerticalGroup(
+            tabCircleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabCircleLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(CircLocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(301, Short.MAX_VALUE))
+        );
+
+        PropertiesPane.addTab("Circle", tabCircle);
+
+        tabLine.setBackground(new java.awt.Color(255, 255, 255));
+
+        LineLocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        LineLocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        LineLocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        LineLocationPane.setLayout(new java.awt.GridLayout(2, 0));
+
+        lineX1Location.setBackground(new java.awt.Color(255, 255, 255));
+        lineX1Location.setForeground(new java.awt.Color(0, 0, 0));
+        lineX1Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel3.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel3.setText("X :");
+        lblLocationXLabel3.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel3.setPreferredSize(new java.awt.Dimension(18, 16));
+        lineX1Location.add(lblLocationXLabel3);
+
+        txtFLineX1Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLineX1Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLineX1Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLineX1ValueActionPerformed(evt);
+            }
+        });
+        lineX1Location.add(txtFLineX1Value);
+
+        LineLocationPane.add(lineX1Location);
+
+        lineY1Location.setBackground(new java.awt.Color(255, 255, 255));
+        lineY1Location.setForeground(new java.awt.Color(0, 0, 0));
+        lineY1Location.setMinimumSize(new java.awt.Dimension(70, 40));
+        lineY1Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel3.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel3.setText("Y :");
+        lblLocationYLabel3.setPreferredSize(new java.awt.Dimension(18, 16));
+        lineY1Location.add(lblLocationYLabel3);
+
+        txtFLineY1Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLineY1Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLineY1Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLineY1ValueActionPerformed(evt);
+            }
+        });
+        lineY1Location.add(txtFLineY1Value);
+
+        LineLocationPane.add(lineY1Location);
+
+        lineX2Location.setBackground(new java.awt.Color(255, 255, 255));
+        lineX2Location.setForeground(new java.awt.Color(0, 0, 0));
+        lineX2Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel4.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel4.setText("X :");
+        lblLocationXLabel4.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel4.setPreferredSize(new java.awt.Dimension(18, 16));
+        lineX2Location.add(lblLocationXLabel4);
+
+        txtFLineX2Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLineX2Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLineX2Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLineX2ValueActionPerformed(evt);
+            }
+        });
+        lineX2Location.add(txtFLineX2Value);
+
+        LineLocationPane.add(lineX2Location);
+
+        lineY2Location.setBackground(new java.awt.Color(255, 255, 255));
+        lineY2Location.setForeground(new java.awt.Color(0, 0, 0));
+        lineY2Location.setMinimumSize(new java.awt.Dimension(70, 40));
+        lineY2Location.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel5.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel5.setText("Y :");
+        lblLocationYLabel5.setPreferredSize(new java.awt.Dimension(18, 16));
+        lineY2Location.add(lblLocationYLabel5);
+
+        txtFLineY2Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFLineY2Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFLineY2Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFLineY2ValueActionPerformed(evt);
+            }
+        });
+        lineY2Location.add(txtFLineY2Value);
+
+        LineLocationPane.add(lineY2Location);
+
+        javax.swing.GroupLayout tabLineLayout = new javax.swing.GroupLayout(tabLine);
+        tabLine.setLayout(tabLineLayout);
+        tabLineLayout.setHorizontalGroup(
+            tabLineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabLineLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(LineLocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        tabLineLayout.setVerticalGroup(
+            tabLineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabLineLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(LineLocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(305, Short.MAX_VALUE))
+        );
+
+        PropertiesPane.addTab("Line", tabLine);
+
+        tabClock.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout tabClockLayout = new javax.swing.GroupLayout(tabClock);
+        tabClock.setLayout(tabClockLayout);
+        tabClockLayout.setHorizontalGroup(
+            tabClockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 198, Short.MAX_VALUE)
         );
-        tab2Layout.setVerticalGroup(
-            tab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        tabClockLayout.setVerticalGroup(
+            tabClockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 437, Short.MAX_VALUE)
         );
 
-        PropertiesPane.addTab("sth else", tab2);
+        PropertiesPane.addTab("Clock", tabClock);
 
-        jButton1.setText("Click me");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        tabEllipse.setBackground(new java.awt.Color(255, 255, 255));
+
+        EllipseLocationPane.setBackground(new java.awt.Color(255, 255, 255));
+        EllipseLocationPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("HACKED", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        EllipseLocationPane.setForeground(new java.awt.Color(0, 0, 0));
+        EllipseLocationPane.setLayout(new java.awt.GridLayout(2, 0));
+
+        ellXLocation.setBackground(new java.awt.Color(255, 255, 255));
+        ellXLocation.setForeground(new java.awt.Color(0, 0, 0));
+        ellXLocation.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel7.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel7.setText("X :");
+        lblLocationXLabel7.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel7.setPreferredSize(new java.awt.Dimension(18, 16));
+        ellXLocation.add(lblLocationXLabel7);
+
+        txtFEllXValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFEllXValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFEllXValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtFEllXValueActionPerformed(evt);
+            }
+        });
+        ellXLocation.add(txtFEllXValue);
+
+        EllipseLocationPane.add(ellXLocation);
+
+        ellYLocation.setBackground(new java.awt.Color(255, 255, 255));
+        ellYLocation.setForeground(new java.awt.Color(0, 0, 0));
+        ellYLocation.setMinimumSize(new java.awt.Dimension(70, 40));
+        ellYLocation.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel6.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel6.setText("Y :");
+        lblLocationYLabel6.setPreferredSize(new java.awt.Dimension(18, 16));
+        ellYLocation.add(lblLocationYLabel6);
+
+        txtFEllYValue.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFEllYValue.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFEllYValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFEllYValueActionPerformed(evt);
+            }
+        });
+        ellYLocation.add(txtFEllYValue);
+
+        EllipseLocationPane.add(ellYLocation);
+
+        ellRadius1.setBackground(new java.awt.Color(255, 255, 255));
+        ellRadius1.setForeground(new java.awt.Color(0, 0, 0));
+        ellRadius1.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationXLabel8.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationXLabel8.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationXLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationXLabel8.setText("R1 :");
+        lblLocationXLabel8.setMinimumSize(new java.awt.Dimension(35, 16));
+        lblLocationXLabel8.setPreferredSize(new java.awt.Dimension(25, 16));
+        ellRadius1.add(lblLocationXLabel8);
+
+        txtFEllR1Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFEllR1Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFEllR1Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFEllR1ValueActionPerformed(evt);
+            }
+        });
+        ellRadius1.add(txtFEllR1Value);
+
+        EllipseLocationPane.add(ellRadius1);
+
+        ellRadius2.setBackground(new java.awt.Color(255, 255, 255));
+        ellRadius2.setForeground(new java.awt.Color(0, 0, 0));
+        ellRadius2.setMinimumSize(new java.awt.Dimension(70, 40));
+        ellRadius2.setPreferredSize(new java.awt.Dimension(70, 40));
+
+        lblLocationYLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        lblLocationYLabel7.setFont(new java.awt.Font("HACKED", 1, 14)); // NOI18N
+        lblLocationYLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        lblLocationYLabel7.setText("R2 :");
+        lblLocationYLabel7.setPreferredSize(new java.awt.Dimension(25, 16));
+        ellRadius2.add(lblLocationYLabel7);
+
+        txtFEllR2Value.setMinimumSize(new java.awt.Dimension(35, 24));
+        txtFEllR2Value.setPreferredSize(new java.awt.Dimension(35, 24));
+        txtFEllR2Value.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFEllR2ValueActionPerformed(evt);
+            }
+        });
+        ellRadius2.add(txtFEllR2Value);
+
+        EllipseLocationPane.add(ellRadius2);
+
+        javax.swing.GroupLayout tabEllipseLayout = new javax.swing.GroupLayout(tabEllipse);
+        tabEllipse.setLayout(tabEllipseLayout);
+        tabEllipseLayout.setHorizontalGroup(
+            tabEllipseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabEllipseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(EllipseLocationPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        tabEllipseLayout.setVerticalGroup(
+            tabEllipseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabEllipseLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(EllipseLocationPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(302, Short.MAX_VALUE))
+        );
+
+        PropertiesPane.addTab("Ellipse", tabEllipse);
+
+        btnLMAO.setText("xD");
+        btnLMAO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLMAOActionPerformed(evt);
             }
         });
 
@@ -451,6 +999,66 @@ public class MainWindow extends javax.swing.JFrame{
         });
         shapesChoosingBar.add(btnCar);
         btnCar.setBounds(10, 8, 45, 45);
+
+        btnRect.setBorderPainted(false);
+        btnRect.setContentAreaFilled(false);
+        btnRect.setFocusPainted(false);
+        btnRect.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRectMouseClicked(evt);
+            }
+        });
+        shapesChoosingBar.add(btnRect);
+        btnRect.setBounds(60, 8, 45, 45);
+
+        btnCirc.setBorderPainted(false);
+        btnCirc.setContentAreaFilled(false);
+        btnCirc.setFocusPainted(false);
+        btnCirc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCircMouseClicked(evt);
+            }
+        });
+        shapesChoosingBar.add(btnCirc);
+        btnCirc.setBounds(110, 8, 45, 45);
+
+        btnLine.setBorderPainted(false);
+        btnLine.setContentAreaFilled(false);
+        btnLine.setFocusPainted(false);
+        btnLine.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLineMouseClicked(evt);
+            }
+        });
+        shapesChoosingBar.add(btnLine);
+        btnLine.setBounds(160, 8, 45, 45);
+
+        btnEllipse.setBorderPainted(false);
+        btnEllipse.setContentAreaFilled(false);
+        btnEllipse.setFocusPainted(false);
+        btnEllipse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEllipseMouseClicked(evt);
+            }
+        });
+        shapesChoosingBar.add(btnEllipse);
+        btnEllipse.setBounds(210, 8, 45, 45);
+
+        btnClock.setBorderPainted(false);
+        btnClock.setContentAreaFilled(false);
+        btnClock.setFocusPainted(false);
+        btnClock.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClockMouseClicked(evt);
+            }
+        });
+        btnClock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClockActionPerformed(evt);
+            }
+        });
+        shapesChoosingBar.add(btnClock);
+        btnClock.setBounds(260, 8, 45, 45);
 
         ShapeAction2DContainerPane.add(shapesChoosingBar);
         shapesChoosingBar.setBounds(0, 0, 482, 56);
@@ -533,13 +1141,6 @@ public class MainWindow extends javax.swing.JFrame{
             }
         });
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         btnPyramid.setBorderPainted(false);
         btnPyramid.setContentAreaFilled(false);
         btnPyramid.setFocusPainted(false);
@@ -558,9 +1159,7 @@ public class MainWindow extends javax.swing.JFrame{
                 .addComponent(btnCube, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPyramid, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(190, 190, 190)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(674, Short.MAX_VALUE))
         );
         ShapeAction3DContainerPaneLayout.setVerticalGroup(
             ShapeAction3DContainerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -568,12 +1167,18 @@ public class MainWindow extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(ShapeAction3DContainerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPyramid, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCube, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(btnCube, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
         ShapeActionContainerPane.add(ShapeAction3DContainerPane, "card3");
+
+        btnTest.setText("!");
+        btnTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTestActionPerformed(evt);
+            }
+        });
 
         mbFileMenu.setText("File");
         mbFileMenu.setToolTipText("Some specific tasks");
@@ -629,22 +1234,25 @@ public class MainWindow extends javax.swing.JFrame{
                     .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(41, 41, 41))
-                    .addComponent(PropertiesPane)))
+                    .addComponent(PropertiesPane)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnTest, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLMAO)
+                        .addGap(14, 14, 14))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, 0)
+                    .addComponent(ShapeActionContainerPane, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLMAO)
+                            .addComponent(btnTest))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PropertiesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -712,6 +1320,8 @@ public class MainWindow extends javax.swing.JFrame{
     }//GEN-LAST:event_btnGridActionPerformed
 
     private void btnCarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarActionPerformed
+        chosen2DShape = 1;
+        this.PropertiesPane.setSelectedIndex(0);
         //System.out.println("??");      
         if (start == true) {
             newCar = new Car(new Point(location, startLocationY));
@@ -746,7 +1356,9 @@ public class MainWindow extends javax.swing.JFrame{
     }//GEN-LAST:event_btnCarActionPerformed
     
     private void btnCarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCarMouseClicked
+        this.PropertiesPane.setSelectedIndex(0);
         if (start == false) { 
+            chosen2DShape = 1;
             System.out.println("Draw car");
             start = true;
             location = startLocationX;
@@ -758,8 +1370,11 @@ public class MainWindow extends javax.swing.JFrame{
             exist = true;
     }//GEN-LAST:event_btnCarMouseClicked
 }
+    
     private void btnPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPlayMouseClicked
+        chosen2DShape = 1;
         timerDelay = 100 - this.sldSpeed.getValue();
+        this.PropertiesPane.setSelectedIndex(0);
         if(start == false || exist == true){
             System.out.println("Play animation");
             start = true;
@@ -800,14 +1415,14 @@ public class MainWindow extends javax.swing.JFrame{
         dialog.setVisible(true);
     }//GEN-LAST:event_btnQtmInfoMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLMAOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLMAOActionPerformed
         gottaSeeitManxD();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLMAOActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
         //NhapToaDo3D ntd = new NhapToaDo3D("Cube");
         new GUI().setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnTestActionPerformed
 
     private void sldSpeedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldSpeedStateChanged
         timerDelay = 100 - this.sldSpeed.getValue();
@@ -815,6 +1430,7 @@ public class MainWindow extends javax.swing.JFrame{
         System.out.println(this.sldSpeed.getValue());
         if(timer != null){
             timer.stop();
+            System.out.println("Change Speed");
             timer = new Timer(timerDelay, this.btnCar.getActionListeners()[0]);
             timer.start();
         }       
@@ -826,11 +1442,12 @@ public class MainWindow extends javax.swing.JFrame{
         if(!x.isBlank() && !y.isBlank() && x.matches("-?\\d+") && y.matches("-?\\d+")){
             System.out.println("gg");
             location = xByScaledX(Integer.parseInt(x));
-            startLocationY = yByScaleY(Integer.parseInt(y));
+            startLocationY = yByScaledY(Integer.parseInt(y));
              {  
                 start = true;
                 exist = true;
                 newCar = new Car(new Point(location, startLocationY));
+                System.out.println("Draw Car");
                 this.DrawingPane2D.repaint();
                 location += step;     
             }
@@ -845,7 +1462,7 @@ public class MainWindow extends javax.swing.JFrame{
     }//GEN-LAST:event_txtFLocationYValueActionPerformed
 
     private void btnCubeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCubeMouseClicked
-        chosenShape = 1;
+        chosen3DShape = 1;
         JTextField xField = new JTextField(5);
         JTextField yField = new JTextField(5);
         JTextField zField = new JTextField(5);
@@ -864,11 +1481,12 @@ public class MainWindow extends javax.swing.JFrame{
             _3dSize.setY(Integer.parseInt(yField.getText()));
             _3dSize.setZ(Integer.parseInt(zField.getText()));
         }
+        System.out.println("Draw Cube/Rectangular");
         this.DrawingPane3D.repaint();
     }//GEN-LAST:event_btnCubeMouseClicked
 
     private void btnPyramidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPyramidMouseClicked
-        chosenShape = 2;
+        chosen3DShape = 2;
         JTextField xField = new JTextField(5);
         JTextField yField = new JTextField(5);
         JTextField zField = new JTextField(5);
@@ -887,8 +1505,248 @@ public class MainWindow extends javax.swing.JFrame{
             _3dSize.setY(Integer.parseInt(yField.getText()));
             _3dSize.setZ(Integer.parseInt(zField.getText()));
         }
+        System.out.println("Draw Pyramid");
         this.DrawingPane3D.repaint();
     }//GEN-LAST:event_btnPyramidMouseClicked
+
+    private void btnRectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRectMouseClicked
+        chosen2DShape = 2;
+        this.PropertiesPane.setSelectedIndex(1);
+        String X1 = this.txtFRectX1Value.getText();
+        String Y1 = this.txtFRectY1Value.getText();
+        String X2 = this.txtFRectX2Value.getText();
+        String Y2 = this.txtFRectY2Value.getText();
+        
+        if(!X1.isBlank() && !Y1.isBlank() && !X2.isBlank() && !Y2.isBlank() && X1.matches("-?\\d+")&& Y1.matches("-?\\d+")&& X2.matches("-?\\d+")&& Y2.matches("-?\\d+")){
+            _2dSize.setA(xByScaledX(Integer.parseInt(X1)));
+            _2dSize.setB(yByScaledY(Integer.parseInt(Y1)));
+            _2dSize.setC(xByScaledX(Integer.parseInt(X2)));
+            _2dSize.setD(yByScaledY(Integer.parseInt(Y2)));
+        }
+        System.out.println("Draw Rectangle");
+        this.DrawingPane2D.repaint();
+        this.txtFRectX1Value.setText(String.valueOf(scaledX(_2dSize.getA())));
+        this.txtFRectY1Value.setText(String.valueOf(scaledY(_2dSize.getB())));
+        this.txtFRectX2Value.setText(String.valueOf(scaledX(_2dSize.getC())));
+        this.txtFRectY2Value.setText(String.valueOf(scaledY(_2dSize.getD())));
+    }//GEN-LAST:event_btnRectMouseClicked
+
+    private void txtFRectX1ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFRectX1ValueActionPerformed
+        chosen2DShape = 2;
+        String X1 = this.txtFRectX1Value.getText();
+        String Y1 = this.txtFRectY1Value.getText();
+        String X2 = this.txtFRectX2Value.getText();
+        String Y2 = this.txtFRectY2Value.getText();
+        
+        if(!X1.isBlank() && !Y1.isBlank() && !X2.isBlank() && !Y2.isBlank() && X1.matches("-?\\d+")&& Y1.matches("-?\\d+")&& X2.matches("-?\\d+")&& Y2.matches("-?\\d+")){
+            _2dSize.setA(xByScaledX(Integer.parseInt(X1)));
+            _2dSize.setB(yByScaledY(Integer.parseInt(Y1)));
+            _2dSize.setC(xByScaledX(Integer.parseInt(X2)));
+            _2dSize.setD(yByScaledY(Integer.parseInt(Y2)));
+            System.out.println("Draw Rectangle");
+            this.DrawingPane2D.repaint();
+        }else{
+            JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ", "Invalid value", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtFRectX1ValueActionPerformed
+
+    private void txtFRectY1ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFRectY1ValueActionPerformed
+        txtFRectX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFRectY1ValueActionPerformed
+
+    private void txtFRectX2ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFRectX2ValueActionPerformed
+        txtFRectX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFRectX2ValueActionPerformed
+
+    private void txtFRectY2ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFRectY2ValueActionPerformed
+        txtFRectX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFRectY2ValueActionPerformed
+
+    private void btnCircMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCircMouseClicked
+        chosen2DShape = 3;
+        this.PropertiesPane.setSelectedIndex(2);
+        String X = this.txtFcircXValue.getText();
+        String Y = this.txtFcircYValue.getText();
+        String R = this.txtFcircRValue.getText();
+      
+        if(!X.isBlank() && !Y.isBlank() && !R.isBlank() && X.matches("-?\\d+")&& Y.matches("-?\\d+")&& R.matches("-?\\d+")){
+            _2dCircleSize.setxO(xByScaledX(Integer.parseInt(X)));
+            _2dCircleSize.setyO(yByScaledY(Integer.parseInt(Y)));
+            _2dCircleSize.setR(reverseScale(Integer.parseInt(R)));
+        }
+        System.out.println("Draw Circle");
+        this.DrawingPane2D.repaint();
+        this.txtFcircXValue.setText(String.valueOf(scaledX(_2dCircleSize.getxO())));
+        this.txtFcircYValue.setText(String.valueOf(scaledY(_2dCircleSize.getyO())));
+        this.txtFcircRValue.setText(String.valueOf(_2dCircleSize.getR() / 5));
+    }//GEN-LAST:event_btnCircMouseClicked
+
+    private void txtFcircXValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFcircXValueActionPerformed
+        chosen2DShape = 3;
+        this.PropertiesPane.setSelectedIndex(2);
+        String X = this.txtFcircXValue.getText();
+        String Y = this.txtFcircYValue.getText();
+        String R = this.txtFcircRValue.getText();
+        
+        if(!X.isBlank() && !Y.isBlank() && !R.isBlank() && X.matches("-?\\d+")&& Y.matches("-?\\d+")&& R.matches("-?\\d+")){
+            _2dCircleSize.setxO(xByScaledX(Integer.parseInt(X)));
+            _2dCircleSize.setyO(yByScaledY(Integer.parseInt(Y)));
+            _2dCircleSize.setR(reverseScale(Integer.parseInt(R)));
+            System.out.println("Draw Circle");
+            this.DrawingPane2D.repaint();
+        }else{
+            JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ", "Invalid value", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtFcircXValueActionPerformed
+
+    private void txtFcircYValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFcircYValueActionPerformed
+        txtFcircXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFcircYValueActionPerformed
+
+    private void txtFcircRValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFcircRValueActionPerformed
+        txtFcircXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFcircRValueActionPerformed
+
+    private void btnLineMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLineMouseClicked
+        chosen2DShape = 4;
+        this.PropertiesPane.setSelectedIndex(3);
+        String X1 = this.txtFLineX1Value.getText();
+        String Y1 = this.txtFLineY1Value.getText();
+        String X2 = this.txtFLineX2Value.getText();
+        String Y2 = this.txtFLineY2Value.getText();
+        
+        if(!X1.isBlank() && !Y1.isBlank() && !X2.isBlank() && !Y2.isBlank() && X1.matches("-?\\d+")&& Y1.matches("-?\\d+")&& X2.matches("-?\\d+")&& Y2.matches("-?\\d+")){
+            _2dSize.setA(xByScaledX(Integer.parseInt(X1)));
+            _2dSize.setB(yByScaledY(Integer.parseInt(Y1)));
+            _2dSize.setC(xByScaledX(Integer.parseInt(X2)));
+            _2dSize.setD(yByScaledY(Integer.parseInt(Y2)));
+        }
+        System.out.println("Draw Line");
+        this.DrawingPane2D.repaint();
+        this.txtFLineX1Value.setText(String.valueOf(scaledX(_2dSize.getA())));
+        this.txtFLineY1Value.setText(String.valueOf(scaledY(_2dSize.getB())));
+        this.txtFLineX2Value.setText(String.valueOf(scaledX(_2dSize.getC())));
+        this.txtFLineY2Value.setText(String.valueOf(scaledY(_2dSize.getD())));
+    }//GEN-LAST:event_btnLineMouseClicked
+
+    private void txtFLineX1ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLineX1ValueActionPerformed
+        chosen2DShape = 4;
+        String X1 = this.txtFLineX1Value.getText();
+        String Y1 = this.txtFLineY1Value.getText();
+        String X2 = this.txtFLineX2Value.getText();
+        String Y2 = this.txtFLineY2Value.getText();
+        
+        if(!X1.isBlank() && !Y1.isBlank() && !X2.isBlank() && !Y2.isBlank() && X1.matches("-?\\d+")&& Y1.matches("-?\\d+")&& X2.matches("-?\\d+")&& Y2.matches("-?\\d+")){
+            _2dSize.setA(xByScaledX(Integer.parseInt(X1)));
+            _2dSize.setB(yByScaledY(Integer.parseInt(Y1)));
+            _2dSize.setC(xByScaledX(Integer.parseInt(X2)));
+            _2dSize.setD(yByScaledY(Integer.parseInt(Y2)));
+            System.out.println("Draw Line");
+            this.DrawingPane2D.repaint();
+        }else{
+            JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ", "Invalid value", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtFLineX1ValueActionPerformed
+
+    private void txtFLineY1ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLineY1ValueActionPerformed
+        txtFLineX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFLineY1ValueActionPerformed
+
+    private void txtFLineX2ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLineX2ValueActionPerformed
+        txtFLineX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFLineX2ValueActionPerformed
+
+    private void txtFLineY2ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFLineY2ValueActionPerformed
+        txtFLineX1ValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFLineY2ValueActionPerformed
+
+    private void btnEllipseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEllipseMouseClicked
+        chosen2DShape = 5;
+        this.PropertiesPane.setSelectedIndex(5);
+        String X = this.txtFEllXValue.getText();
+        String Y = this.txtFEllYValue.getText();
+        String R1 = this.txtFEllR1Value.getText();
+        String R2 = this.txtFEllR2Value.getText();
+        
+        if(!X.isBlank() && !Y.isBlank() && !R1.isBlank() && !R2.isBlank()&& X.matches("-?\\d+")&& Y.matches("-?\\d+")&& R1.matches("-?\\d+") && R2.matches("-?\\d+")){
+            _2dEllSize.setA(xByScaledX(Integer.parseInt(X)));
+            _2dEllSize.setB(yByScaledY(Integer.parseInt(Y)));
+            _2dEllSize.setC(reverseScale(Integer.parseInt(R1)));
+            _2dEllSize.setD(reverseScale(Integer.parseInt(R2)));
+        }
+        System.out.println("Draw Ellipse");
+        this.DrawingPane2D.repaint();
+        this.txtFEllXValue.setText(String.valueOf(scaledX(_2dEllSize.getA())));
+        this.txtFEllYValue.setText(String.valueOf(scaledY(_2dEllSize.getB())));
+        this.txtFEllR1Value.setText(String.valueOf(_2dEllSize.getC() / 5));
+        this.txtFEllR2Value.setText(String.valueOf(_2dEllSize.getD() / 5));
+    }//GEN-LAST:event_btnEllipseMouseClicked
+
+    private void txtFEllXValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFEllXValueActionPerformed
+        chosen2DShape = 5;
+        String X = this.txtFEllXValue.getText();
+        String Y = this.txtFEllYValue.getText();
+        String R1 = this.txtFEllR1Value.getText();
+        String R2 = this.txtFEllR2Value.getText();
+        
+        if(!X.isBlank() && !Y.isBlank() && !R1.isBlank() && !R2.isBlank()&& X.matches("-?\\d+")&& Y.matches("-?\\d+")&& R1.matches("-?\\d+") && R2.matches("-?\\d+")){
+            _2dEllSize.setA(xByScaledX(Integer.parseInt(X)));
+            _2dEllSize.setB(yByScaledY(Integer.parseInt(Y)));
+            _2dEllSize.setC(reverseScale(Integer.parseInt(R1)));
+            _2dEllSize.setD(reverseScale(Integer.parseInt(R2)));
+            System.out.println("Draw Ellipse");
+            this.DrawingPane2D.repaint();
+        }else{
+            JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ", "Invalid value", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtFEllXValueActionPerformed
+
+    private void txtFEllYValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFEllYValueActionPerformed
+        txtFEllXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFEllYValueActionPerformed
+
+    private void txtFEllR1ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFEllR1ValueActionPerformed
+        txtFEllXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFEllR1ValueActionPerformed
+
+    private void txtFEllR2ValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFEllR2ValueActionPerformed
+        txtFEllXValueActionPerformed(evt);
+    }//GEN-LAST:event_txtFEllR2ValueActionPerformed
+
+    private void btnClockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClockMouseClicked
+        chosen2DShape = 6;
+        this.PropertiesPane.setSelectedIndex(4);
+        borderClock = new BorderClock(new java.awt.Rectangle(-40, 40, 80, 120), Color.BLACK);
+        analogClock = new Clock(new java.awt.Rectangle(-35, 35, 70, 70), Color.black);
+
+        timerx = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DrawingPane2D.repaint();
+                isDraw = true;
+                counter++;
+
+                // Object Clock
+                Point centerClock = commonExtensions.ToWorldCoordinates(new Point(analogClock.getSeconsLine().A.x, analogClock.getSeconsLine().A.y));
+                Point tempSecondsLine = commonExtensions.ToWorldCoordinates(new Point(analogClock.getSeconsLine().B.x, analogClock.getSeconsLine().B.y));
+                Point tempMinutesLine = commonExtensions.ToWorldCoordinates(new Point(analogClock.getMinutesLine().B.x, analogClock.getMinutesLine().B.y));
+                Point tempHoursLine = commonExtensions.ToWorldCoordinates(new Point(analogClock.getHoursLine().B.x, analogClock.getHoursLine().B.y));
+                // add here
+//                textAreaLogInfo.setText("Center Clock : " + "(" + centerClock.x + ";" + centerClock.x + ")" + "\n"
+//                        + "Secons Line : " + "(" + tempSecondsLine.x + ";" + tempSecondsLine.y + ")" + "\n"
+//                        + "Minutes Line : " + "(" + tempMinutesLine.x + ";" + tempMinutesLine.y + ")" + "\n"
+//                        + "Hours Line : " + "(" + tempHoursLine.x + ";" + tempHoursLine.y + ")" + "\n"
+//                );
+            }
+        });
+        timerx.start();
+        System.out.println("Draw Clock");
+        //this.DrawingPane2D.repaint();
+    }//GEN-LAST:event_btnClockMouseClicked
+
+    private void btnClockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClockActionPerformed
     // </editor-fold>          
     
     // <editor-fold defaultstate="collapsed" desc="Components Customizing"> 
@@ -944,6 +1802,9 @@ public class MainWindow extends javax.swing.JFrame{
      */
     public void customChoosingShapesActionsBar()
     {
+        /**
+        * 2d Shapes 
+        */
         ImageIcon icon = new ImageIcon("images/car_icon.png");
         Image image = icon.getImage();
         Image newImg = image.getScaledInstance(this.btnCar.getWidth(), this.btnCar.getHeight(), java.awt.Image.SCALE_SMOOTH); 
@@ -967,6 +1828,39 @@ public class MainWindow extends javax.swing.JFrame{
         ImageIcon scaledGridIcon = new ImageIcon(newImg);
         this.btnGrid.setIcon(scaledGridIcon);
         
+        icon = new ImageIcon("images/rectangle_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnRect.getWidth(), this.btnRect.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledRectIcon = new ImageIcon(newImg);
+        this.btnRect.setIcon(scaledRectIcon);
+        
+        icon = new ImageIcon("images/circle_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnCirc.getWidth(), this.btnCirc.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledCircIcon = new ImageIcon(newImg);
+        this.btnCirc.setIcon(scaledCircIcon);
+        
+        icon = new ImageIcon("images/line_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnLine.getWidth(), this.btnLine.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledLineIcon = new ImageIcon(newImg);
+        this.btnLine.setIcon(scaledLineIcon);
+        
+        icon = new ImageIcon("images/ellipse_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnEllipse.getWidth(), this.btnEllipse.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledEllipseIcon = new ImageIcon(newImg);
+        this.btnEllipse.setIcon(scaledEllipseIcon);
+        
+        icon = new ImageIcon("images/clock_icon.png");
+        image = icon.getImage();
+        newImg = image.getScaledInstance(this.btnClock.getWidth(), this.btnClock.getHeight(), java.awt.Image.SCALE_SMOOTH); 
+        ImageIcon scaledClockIcon = new ImageIcon(newImg);
+        this.btnClock.setIcon(scaledClockIcon);
+        
+        /**
+        * 3d Shapes 
+        */
         icon = new ImageIcon("images/cube_icon.png");
         image = icon.getImage();
         newImg = image.getScaledInstance(this.btnCube.getWidth(), this.btnCube.getHeight(), java.awt.Image.SCALE_SMOOTH); 
@@ -1049,15 +1943,6 @@ public class MainWindow extends javax.swing.JFrame{
         this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         this.getRootPane().getActionMap().put("ESCAPE", escapeAction);
         
-        this.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    System.out.println("rwebvb");
-                    e.consume();
-                }
-            }
-        });
         KeyStroke playStopKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, 0);  //S để play/stop animation
         Action playStopAction = new AbstractAction() {
            public void actionPerformed(ActionEvent e) {
@@ -1084,8 +1969,58 @@ public class MainWindow extends javax.swing.JFrame{
                 btnGridActionPerformed(e);
            }    
         }; 
-        this.btnCar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawGridKeyStroke, "DRAWGRID");
-        this.btnCar.getActionMap().put("DRAWGRID", drawGridAction);
+        this.btnGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawGridKeyStroke, "DRAWGRID");
+        this.btnGrid.getActionMap().put("DRAWGRID", drawGridAction);
+        
+        KeyStroke drawRectKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, 0);  //R để vẽ hình cn
+        Action drawRectAction = new AbstractAction() {
+           public void actionPerformed(ActionEvent e) {
+                MouseEvent mEvt = null;
+                    btnRectMouseClicked(mEvt);
+           }    
+        }; 
+        this.btnRect.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawRectKeyStroke, "DRAWRECT");
+        this.btnRect.getActionMap().put("DRAWRECT", drawRectAction);
+        
+        KeyStroke drawCircKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, 0);  //O để vẽ hình tròn
+        Action drawCircAction = new AbstractAction() {
+           public void actionPerformed(ActionEvent e) {
+                MouseEvent mEvt = null;
+                    btnCircMouseClicked(mEvt);
+           }    
+        }; 
+        this.btnCirc.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawCircKeyStroke, "DRAWCIRC");
+        this.btnCirc.getActionMap().put("DRAWCIRC", drawCircAction);
+        
+        KeyStroke drawLineKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_L, 0);  //L để vẽ đường thẳng
+        Action drawLineAction = new AbstractAction() {
+           public void actionPerformed(ActionEvent e) {
+                MouseEvent mEvt = null;
+                btnLineMouseClicked(mEvt);
+           }    
+        }; 
+        this.btnLine.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawLineKeyStroke, "DRAWLINE");
+        this.btnLine.getActionMap().put("DRAWLINE", drawLineAction);
+        
+        KeyStroke drawEllipseKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, 0);  //E để vẽ ellipse
+        Action drawEllipseAction = new AbstractAction() {
+           public void actionPerformed(ActionEvent e) {
+                MouseEvent mEvt = null;
+                btnEllipseMouseClicked(mEvt);
+           }    
+        }; 
+        this.btnEllipse.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawEllipseKeyStroke, "DRAWELLIPSE");
+        this.btnEllipse.getActionMap().put("DRAWELLIPSE", drawEllipseAction);
+        
+        KeyStroke drawClockKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_K, 0);  //E để vẽ ellipse
+        Action drawClockAction = new AbstractAction() {
+           public void actionPerformed(ActionEvent e) {
+                MouseEvent mEvt = null;
+                btnClockMouseClicked(mEvt);
+           }    
+        }; 
+        this.btnClock.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(drawClockKeyStroke, "DRAWCLOCK");
+        this.btnClock.getActionMap().put("DRAWCLOCK", drawClockAction);
         
         KeyStroke memberInfoKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0);  //nhấn /(?) để hiển thị thông tin thành viên
         Action memberInfoAction = new AbstractAction() {
@@ -1094,8 +2029,8 @@ public class MainWindow extends javax.swing.JFrame{
                 btnQtmInfoMouseClicked(mEvt);
            }    
         }; 
-        this.btnCar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(memberInfoKeyStroke, "SHOWINFO");
-        this.btnCar.getActionMap().put("SHOWINFO", memberInfoAction);
+        this.btnQtmInfo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(memberInfoKeyStroke, "SHOWINFO");
+        this.btnQtmInfo.getActionMap().put("SHOWINFO", memberInfoAction);
         
     }  
     
@@ -1201,12 +2136,12 @@ public class MainWindow extends javax.swing.JFrame{
 
     public int xByScaledX(double originalValue) // trả về tọa độ X gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
     {
-        return originX + 5 * (int)originalValue + 2/*scaledX(originalValue)*/;
+        return originX + 5 * (int)originalValue /*scaledX(originalValue)*/;
     }
 
-    public int yByScaleY(double originalValue) // trả về tọa độ Y gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
+    public int yByScaledY(double originalValue) // trả về tọa độ Y gốc được làm tròn chia hết cho 5 (tọa độ ứng với từng mốc scale)
     {
-        return originY - 5 * (int)originalValue + 2/*scaledY(originalValue)*/;
+        return originY - 5 * (int)originalValue /*scaledY(originalValue)*/;
     }
 
 //    public Point pointByScale(Point orgPoint) {
@@ -1215,24 +2150,39 @@ public class MainWindow extends javax.swing.JFrame{
 //        return new Point(xScaled, yScaled);
 //    }
 //
-    public int reverseScale(int scaleValue) {
-        return 5 * scaleValue + 3;
+    public int reverseScale(int scaledValue) {
+        return 5 * scaledValue;
     }
     // </editor-fold> 
     
+    private void clockRun(Graphics2D g2d) {
+
+        LocalTime now = LocalTime.now();
+        int secondsNow = now.getSecond();
+        int minutesNow = now.getMinute();
+        int hoursNow = now.getHour();
+
+        double seconds = secondsNow * 6;
+        double minutes = minutesNow * 6;
+        double hours = hoursNow * 30;
+
+        analogClock.RotateTransformSecons(seconds);
+        analogClock.RotateTransformMinutes(minutes);
+        analogClock.RotateTransformHours(hours);
+    }
     
     // <editor-fold defaultstate="collapsed" desc="Global User-defined variables declaration">   
     int originX = 400;   // tâm X
     int originY = 250;   // tâm Y
     
-    int location = 20 - 3;
-    int startLocationX = 20 - 3;
-    int stopLocationX = 550 - 3;
+    int location = 20 ;
+    int startLocationX = 20 ;
+    int stopLocationX = 550 ;
     int upStopLocationY = 100;
     int downStopLocationY = 400;
     int step = 5;   
     int timerDelay;
-    int startLocationY = 290 + 2;
+    int startLocationY = 290 ;
     boolean start = false;
     boolean runBackX = false;
     boolean runBackY = false;
@@ -1252,25 +2202,47 @@ public class MainWindow extends javax.swing.JFrame{
     
     Car newCar;
     
-    int chosenShape = 0;
+    int chosen3DShape = 0;
+    int chosen2DShape = 0;
     boolean gridAvailable = false;
     _3dShapesSize _3dSize = new _3dShapesSize();
+    _2dShapesSize _2dSize = new _2dShapesSize(350 , 200, 450 , 300);
+    _2dShapesSize _2dEllSize = new _2dShapesSize(400, 250, 200, 100);
+    _2dShapesSize _2dCircleSize = new _2dShapesSize(400, 250, 100);
+    Rectangle newRect = null;
+    Circle newCirc = null;
+    Line newLine = null;
+    Ellipse newEllipse = null;
+    
+    private JTextArea textAreaLogInfo;
+    Paint2D paint2D = new Paint2D(textAreaLogInfo);
+    private BorderClock borderClock;
+    private Clock analogClock;
+    private int counter = 0;
+    private boolean isDraw = false;
+    private CommonExtensions commonExtensions;
+    private Grid2D grid;
+    Timer timerx = null;
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Global application variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel CarLocationPane;
+    private javax.swing.JPanel CarSpeedPane;
+    private javax.swing.JPanel CircLocationPane;
     private javax.swing.JPanel DrawingPane2D;
     private javax.swing.JPanel DrawingPane3D;
+    private javax.swing.JPanel EllipseLocationPane;
     private javax.swing.JPanel GridPane;
     private javax.swing.JLayeredPane LayeredDrawingPane;
-    private javax.swing.JPanel LocationPane;
+    private javax.swing.JPanel LineLocationPane;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel ModeStatusBar;
     private javax.swing.JTabbedPane PropertiesPane;
+    private javax.swing.JPanel RectLocationPane;
     private javax.swing.JPanel ShapeAction2DContainerPane;
     private javax.swing.JPanel ShapeAction3DContainerPane;
     private javax.swing.JPanel ShapeActionContainerPane;
-    private javax.swing.JPanel SpeedPane;
     private javax.swing.JPanel SttBar;
     private javax.swing.JPanel XLocation;
     private javax.swing.JPanel YLocation;
@@ -1278,28 +2250,82 @@ public class MainWindow extends javax.swing.JFrame{
     private javax.swing.JMenuItem _3DMenuItem;
     private javax.swing.JPanel actionChoosingBar;
     private javax.swing.JButton btnCar;
+    private javax.swing.JButton btnCirc;
+    private javax.swing.JButton btnClock;
     private javax.swing.JButton btnCube;
+    private javax.swing.JButton btnEllipse;
     private javax.swing.JButton btnGrid;
+    private javax.swing.JButton btnLMAO;
+    private javax.swing.JButton btnLine;
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnPyramid;
     private javax.swing.JButton btnQtmInfo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnRect;
+    private javax.swing.JButton btnTest;
+    private javax.swing.JPanel circRadius;
+    private javax.swing.JPanel circXLocation;
+    private javax.swing.JPanel circYLocation;
+    private javax.swing.JPanel ellRadius1;
+    private javax.swing.JPanel ellRadius2;
+    private javax.swing.JPanel ellXLocation;
+    private javax.swing.JPanel ellYLocation;
     private javax.swing.JLabel lblLocationXLabel;
+    private javax.swing.JLabel lblLocationXLabel1;
+    private javax.swing.JLabel lblLocationXLabel2;
+    private javax.swing.JLabel lblLocationXLabel3;
+    private javax.swing.JLabel lblLocationXLabel4;
+    private javax.swing.JLabel lblLocationXLabel5;
+    private javax.swing.JLabel lblLocationXLabel6;
+    private javax.swing.JLabel lblLocationXLabel7;
+    private javax.swing.JLabel lblLocationXLabel8;
     private javax.swing.JLabel lblLocationYLabel;
+    private javax.swing.JLabel lblLocationYLabel1;
+    private javax.swing.JLabel lblLocationYLabel2;
+    private javax.swing.JLabel lblLocationYLabel3;
+    private javax.swing.JLabel lblLocationYLabel4;
+    private javax.swing.JLabel lblLocationYLabel5;
+    private javax.swing.JLabel lblLocationYLabel6;
+    private javax.swing.JLabel lblLocationYLabel7;
     private javax.swing.JLabel lblModeStatus;
     private javax.swing.JLabel lblModeStatusValue;
     private javax.swing.JLabel lblSpeedFPMs;
+    private javax.swing.JPanel lineX1Location;
+    private javax.swing.JPanel lineX2Location;
+    private javax.swing.JPanel lineY1Location;
+    private javax.swing.JPanel lineY2Location;
     private javax.swing.JMenu mbFileMenu;
     private javax.swing.JMenu mbModeMenu;
+    private javax.swing.JPanel rectX1Location;
+    private javax.swing.JPanel rectX2Location;
+    private javax.swing.JPanel rectY1Location;
+    private javax.swing.JPanel rectY2Location;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JPanel separator;
     private javax.swing.JPanel shapesChoosingBar;
     private javax.swing.JSlider sldSpeed;
-    private javax.swing.JPanel tab2;
     private javax.swing.JPanel tabCar;
+    private javax.swing.JPanel tabCircle;
+    private javax.swing.JPanel tabClock;
+    private javax.swing.JPanel tabEllipse;
+    private javax.swing.JPanel tabLine;
+    private javax.swing.JPanel tabRect;
+    private javax.swing.JTextField txtFEllR1Value;
+    private javax.swing.JTextField txtFEllR2Value;
+    private javax.swing.JTextField txtFEllXValue;
+    private javax.swing.JTextField txtFEllYValue;
+    private javax.swing.JTextField txtFLineX1Value;
+    private javax.swing.JTextField txtFLineX2Value;
+    private javax.swing.JTextField txtFLineY1Value;
+    private javax.swing.JTextField txtFLineY2Value;
     private javax.swing.JTextField txtFLocationXValue;
     private javax.swing.JTextField txtFLocationYValue;
+    private javax.swing.JTextField txtFRectX1Value;
+    private javax.swing.JTextField txtFRectX2Value;
+    private javax.swing.JTextField txtFRectY1Value;
+    private javax.swing.JTextField txtFRectY2Value;
+    private javax.swing.JTextField txtFcircRValue;
+    private javax.swing.JTextField txtFcircXValue;
+    private javax.swing.JTextField txtFcircYValue;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 }

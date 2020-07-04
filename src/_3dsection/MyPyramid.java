@@ -1,5 +1,6 @@
 package _3dsection;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.io.BufferedWriter;
 
@@ -87,9 +88,10 @@ import java.io.BufferedWriter;
         this.dt11.draw(g);
         if(GUI.X == 0){
             this.dt12.setB(new Point(400,0));
+ //           g.getGraphicAdapter().setColor(Color.BLUE);
             this.dt12.draw(g);
         }
-        else
+        else{}
             this.dt12.Net_Dut(g.getGraphicAdapter(), this.getDt12().getA().x, this.getDt12().getA().y, this.getDt12().getB().x, this.getDt12().getB().y);
         
     }
